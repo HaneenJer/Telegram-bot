@@ -1,10 +1,18 @@
 from telegram import *
 from telegram.ext import *
 import requests
+import logging
 
 TOKEN = '5048699289:AAGd1BysZFujGqZ1BDS4R64EJ-nyQ0De9pw'
 # flask app runs on port 5000
 URL = 'http://localhost:5000'
+
+# Enable logging
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
+)
+
+logger = logging.getLogger(__name__)
 
 
 # this function is called when we start the bot
@@ -17,18 +25,17 @@ def register(update: Update, context):
     chat_id = update.effective_chat.id
     rel_url = URL + '/register'
     data = {'chat_id': chat_id}
-    try:
-        requests.post(rel_url, data)
-    except requests.exceptions.ConnectionError:
-        print("Connection refused")
-    # TODO: check why connection is not working!! 
-    update.message.reply_text("Welcome!! ")
+    response = requests.post(rel_url, params=data)
+    update.message.reply_text(response.text)
 
 
 # this function is called when the user types remove
 def remove(update: Update, context):
-
-    update.message.reply_text("")
+    chat_id = update.effective_chat.id
+    rel_url = URL + '/remove'
+    data = {'chat_id': chat_id}
+    response = requests.delete(rel_url, params=data)
+    update.message.reply_text(response.text)
 
 
 def polls_bot():
