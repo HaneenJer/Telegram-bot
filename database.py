@@ -6,12 +6,13 @@ db = SQLAlchemy()
 class User(db.Model):
     __tablename__ = 'users'
     chat_id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(128))
 
 
-def db_add_usr(chat_id):
+def db_add_usr(chat_id, username):
     try:
-        user = User(chat_id=chat_id)
-        db.session.add(user)
+        user = User(chat_id=chat_id, username=username)
+        db.session.add(user, username)
         db.session.commit()
     except Exception:
         db.session.rollback()

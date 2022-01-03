@@ -15,6 +15,11 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+def echo(update: Update, context) -> None:
+    """Echo the user message."""
+    update.message.reply_text(update.message.text)
+
+
 # this function is called when we start the bot
 def start(update: Update, context):
     update.message.reply_text("hi! just checking!")
@@ -23,8 +28,9 @@ def start(update: Update, context):
 # this function is called when the user types register
 def register(update: Update, context):
     chat_id = update.effective_chat.id
+    username = update.message.chat.first_name
     rel_url = URL + '/register'
-    data = {'chat_id': chat_id}
+    data = {'chat_id': chat_id, 'username': username}
     response = requests.post(rel_url, params=data)
     update.message.reply_text(response.text)
 
