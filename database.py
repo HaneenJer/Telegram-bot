@@ -19,11 +19,12 @@ def db_add_usr(chat_id, username):
         return -1
 
 
-def db_delete_usr(chat_id):
+def db_delete_usr(chat_id, username):
     try:
-        user = User.query.filter_by(chat_id=chat_id).first()
-        if user is not None:
-            db.session.delete(user)
+        user_chat = User.query.filter_by(chat_id=chat_id).first()
+
+        if user_chat is not None:
+            db.session.delete(user_chat)
             db.session.commit()
         else:
             return -1

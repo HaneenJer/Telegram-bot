@@ -23,16 +23,18 @@ def add_user():
     status = db_add_usr(chat_id=int(request.args.get("chat_id")), username= request.args.get("username"))
     if status == -1:
         return Response("this user is already registered", status=CONFLICT)
-    return Response("[CHECKING]---add user", status=OK)
+    return Response("user added", status=OK)
     pass
 
 
 @app.route('/remove', methods=['DELETE'])
 def delete_user():
-    status = db_delete_usr(chat_id=int(request.args.get("chat_id")))
+    status = db_delete_usr(chat_id=int(request.args.get("chat_id")), username=(request.args.get("chat_id")))
     if status == -1:
         return Response("this user doesnt exist", status=NOTFOUND)
-    return Response("[CHECKING]---remove user", status=OK)
+    if status == -2:
+        return Response("this is not the right username", status=NOTFOUND)
+    return Response("user removed", status=OK)
     pass
 
 
