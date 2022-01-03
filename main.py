@@ -15,11 +15,6 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def echo(update: Update, context) -> None:
-    """Echo the user message."""
-    update.message.reply_text(update.message.text)
-
-
 # this function is called when we start the bot
 def start(update: Update, context):
     username = update.message.chat.first_name

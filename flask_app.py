@@ -12,7 +12,6 @@ CONFLICT = 409
 OK = 200
 
 
-
 @app.before_first_request
 def init():
     with app.app_context():

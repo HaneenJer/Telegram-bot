@@ -6,7 +6,7 @@ db = SQLAlchemy()
 class User(db.Model):
     __tablename__ = 'users'
     chat_id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(128))
+    username = db.Column(db.String(255))
 
 
 def db_add_usr(chat_id, username):
