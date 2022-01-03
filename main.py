@@ -22,13 +22,14 @@ def echo(update: Update, context) -> None:
 
 # this function is called when we start the bot
 def start(update: Update, context):
+    username = update.message.chat.first_name
     update.message.reply_text("hi! just checking!")
 
 
 # this function is called when the user types register
 def register(update: Update, context):
     chat_id = update.effective_chat.id
-    username = update.message.chat.first_name
+    username = update.message.text.split(' ')[1]
     rel_url = URL + '/register'
     data = {'chat_id': chat_id, 'username': username}
     response = requests.post(rel_url, params=data)
