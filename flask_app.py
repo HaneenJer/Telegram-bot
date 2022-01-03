@@ -1,10 +1,17 @@
 from flask import *
+from database import create_db
+
+
 
 app = Flask(__name__)
-# TODO: change secret key
-# TODO: init database
-#app.config['SECRET_KEY'] = 'some secret string'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost:5432/tele_polls'
+app.config['SECRET_KEY'] = 'g34jdk9018220dd'
 
+
+@app.before_first_request
+def init():
+    with app.app_context():
+        create_db(app)
 
 @app.route('/register', methods=['POST'])
 def add_user():
