@@ -4,6 +4,8 @@ from database import *
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost:5432/tele_polls'
 app.config['SECRET_KEY'] = 'g34jdk9018220dd'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 
 NOTFOUND = 404
 CONFLICT = 409
