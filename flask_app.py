@@ -20,9 +20,11 @@ def init():
 
 @app.route('/register', methods=['POST'])
 def add_user():
-    status = db_add_usr(chat_id=int(request.args.get("chat_id")), username= request.args.get("username"))
+    status = db_add_usr(chat_id=int(request.args.get("chat_id")), username=request.args.get("username"))
     if status == -1:
         return Response("this user is already registered", status=CONFLICT)
+    elif status == -2:
+        return Response("this user is already registered with another name", status=CONFLICT)
     return Response("user added", status=OK)
     pass
 

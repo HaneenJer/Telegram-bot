@@ -12,11 +12,15 @@ class User(db.Model):
 def db_add_usr(chat_id, username):
     try:
         user = User(chat_id=chat_id, username=username)
+        user_exists = User.query.filter_by(chat_id=chat_id).first()
+        if user_exists is not None:
+            if user_exists.username != username:
+                return -2
+            return -1
         db.session.add(user, username)
         db.session.commit()
     except Exception:
         db.session.rollback()
-        return -1
 
 
 def db_delete_usr(chat_id, username):
