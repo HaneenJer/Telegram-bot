@@ -29,7 +29,7 @@ def add_user():
 
 @app.route('/remove', methods=['DELETE'])
 def delete_user():
-    status = db_delete_usr(chat_id=int(request.args.get("chat_id")), username=(request.args.get("chat_id")))
+    status = db_delete_usr(chat_id=int(request.args.get("chat_id")), username=(request.args.get("username")))
     if status == -1:
         return Response("this user doesnt exist", status=NOTFOUND)
     if status == -2:

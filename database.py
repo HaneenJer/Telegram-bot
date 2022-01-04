@@ -24,6 +24,8 @@ def db_delete_usr(chat_id, username):
         user_chat = User.query.filter_by(chat_id=chat_id).first()
 
         if user_chat is not None:
+            if user_chat.username != username:
+                return -2
             db.session.delete(user_chat)
             db.session.commit()
         else:
