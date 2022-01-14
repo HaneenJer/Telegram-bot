@@ -8,10 +8,12 @@ class User(db.Model):
     chat_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(255))
 
+
 class Admin(db.Model):
     __tablename__ = 'admins'
-    name = db.Column(db.String(255),primary_key=True)
+    name = db.Column(db.String(255), primary_key=True)
     password = db.Column(db.String(255))
+
 
 def db_add_usr(chat_id, username):
     try:
@@ -26,7 +28,8 @@ def db_add_usr(chat_id, username):
     except Exception:
         db.session.rollback()
 
-def db_add_Admin(username, password):
+
+def db_add_admin(username, password):
     try:
         admin = Admin(password=password, name=username)
         admin_exists = Admin.query.filter_by(name=username).first()
@@ -37,7 +40,8 @@ def db_add_Admin(username, password):
     except Exception:
         db.session.rollback()
 
-def db_fetch_Admins():
+
+def db_fetch_admins():
     try:
         admins = Admin.query.all()
         if admins is None:
@@ -46,8 +50,9 @@ def db_fetch_Admins():
     except Exception:
         db.session.rollback()
 
+
 def format_admin(Admin):
-    return{
+    return {
         "name": Admin.name,
         "password": Admin.password
     }
