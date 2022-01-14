@@ -8,7 +8,8 @@ const baseUrl = "http://localhost:5000"
 
 function Dashboard(props){
   const [adminsList, setAdminsList] = useState([]);
-
+  const username = useFormInput('');
+  const password = useFormInput('');
 
   const fetchAdmins = async () => {
     try {
@@ -28,6 +29,7 @@ function Dashboard(props){
   console.log(adminsList)
 
 
+
   const user = getUser();
 
   // handle click event of logout button
@@ -35,6 +37,13 @@ function Dashboard(props){
     removeUserSession();
     props.history.push('/login');
   }
+
+  // handle click event of logout button
+  const handleAddAdmin = () => {
+    axios.post('http://localhost:5000/admins', { username: username.value, password: password.value })
+  }
+
+
 
   return (
 
@@ -63,10 +72,32 @@ function Dashboard(props){
           ))}
         </tbody>
       </table>
+        <div>
+        username<br />
+        <input type="text"  autoComplete="new-admin" />
+      </div>
+      <div style={{ marginTop: 10 }}>
+        password<br />
+        <input type="password"  autoComplete="new-password" />
+      </div>
+      <input type="button" value={'Add new admin!'} onClick={handleAddAdmin} /><br />
       </div>
     </Fragment>
 
   );
 };
+
+  const useFormInput = initialValue => {
+    const [value, setValue] = useState(initialValue);
+
+    const handleChange = e => {
+      setValue(e.target.value);
+    }
+    return {
+      value,
+      onChange: handleChange
+    }
+  }
+
 
 export default Dashboard;

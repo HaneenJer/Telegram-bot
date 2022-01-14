@@ -28,8 +28,8 @@ def db_add_usr(chat_id, username):
 
 def db_add_Admin(username, password):
     try:
-        admin = Admin(password=password, username=username)
-        admin_exists = Admin.query.filter_by(username=username).first()
+        admin = Admin(password=password, name=username)
+        admin_exists = Admin.query.filter_by(name=username).first()
         if admin_exists is not None:
             return -1
         db.session.add(admin, username)
@@ -39,13 +39,16 @@ def db_add_Admin(username, password):
 
 def db_fetch_Admins():
     try:
-        return Admin.query.all()
+        admins = Admin.query.all()
+        if admins is None:
+            return -1
+        return admins
     except Exception:
         db.session.rollback()
 
 def format_admin(Admin):
     return{
-        "name": Admin.username,
+        "name": Admin.name,
         "password": Admin.password
     }
 

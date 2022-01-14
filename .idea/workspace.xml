@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8212b66e-513a-4110-b8c3-8fd44c7ba25f" name="Changes" comment="add login table (just frontend for now)">
+    <list default="true" id="8212b66e-513a-4110-b8c3-8fd44c7ba25f" name="Changes" comment="adding backend logic for admins table - still doesn't work">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/database.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/flask_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/flask_app.py" afterDir="false" />
@@ -44,7 +44,8 @@
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -163,7 +164,8 @@
       <workItem from="1642092552889" duration="2738000" />
       <workItem from="1642097008816" duration="4135000" />
       <workItem from="1642101233319" duration="16834000" />
-      <workItem from="1642127046091" duration="631000" />
+      <workItem from="1642127046091" duration="5156000" />
+      <workItem from="1642156373954" duration="4136000" />
     </task>
     <task id="LOCAL‎00001" summary="add login logic">
       <created>1642104777905</created>
@@ -183,7 +185,13 @@
       <option name="presentableId" value="LOCAL‎00003" />
       <updated>1642111500973</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL‎00004" summary="adding backend logic for admins table - still doesn't work">
+      <created>1642128001622</created>
+      <option name="number" value="LOCAL‎00004" />
+      <option name="presentableId" value="LOCAL‎00004" />
+      <updated>1642128001622</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -231,12 +239,13 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add login logic" />
     <MESSAGE value="add login table (just frontend for now)" />
-    <option name="LAST_COMMIT_MESSAGE" value="add login table (just frontend for now)" />
+    <MESSAGE value="adding backend logic for admins table - still doesn't work" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding backend logic for admins table - still doesn't work" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Telegram_bot$Telegram_bot.coverage" NAME="Telegram-bot Coverage Results" MODIFIED="1642094043274" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/Telegram_bot$flask_app.coverage" NAME="flask_app Coverage Results" MODIFIED="1642127675842" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/server" />
+    <SUITE FILE_PATH="coverage/Telegram_bot$Telegram_bot.coverage" NAME="Telegram-bot Coverage Results" MODIFIED="1642159862778" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/Telegram_bot$flask_app.coverage" NAME="flask_app Coverage Results" MODIFIED="1642159952924" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/server" />
     <SUITE FILE_PATH="coverage/Telegram_bot$Flask__flask_app_py_.coverage" NAME="Flask (flask_app.py) Coverage Results" MODIFIED="1641314593351" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/Telegram_bot$main.coverage" NAME="main Coverage Results" MODIFIED="1642127660401" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Telegram_bot$main.coverage" NAME="main Coverage Results" MODIFIED="1642157582026" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

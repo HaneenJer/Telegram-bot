@@ -1,11 +1,13 @@
 from flask import *
+from flask_cors import cors
+import flask_cors
 from database import *
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:i4gw6RHK@localhost:5432/tele_polls'
 app.config['SECRET_KEY'] = 'g34jdk9018220dd'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
+cors(app)
 
 NOTFOUND = 404
 CONFLICT = 409
@@ -49,6 +51,15 @@ def get_admins():
         admins_list.append(format_admin(admin))
     {'admins': admins_list}
     return {'admins': admins_list}
+
+
+@app.route('/admins', methods=['POST'])
+def add_admin():
+    status = db_add_admin(username=request.args.get("username"),password=request.args.get("password"))
+    if status == -1:
+        return Response("this admin is already registered", status=CONFLICT)
+    return Response("admin added", status=OK)
+    pass
 
 
 
