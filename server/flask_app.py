@@ -1,13 +1,12 @@
 from flask import *
-from flask_cors import cors
-import flask_cors
+from flask_cors import CORS
 from database import *
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:i4gw6RHK@localhost:5432/tele_polls'
 app.config['SECRET_KEY'] = 'g34jdk9018220dd'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-cors(app)
+CORS(app)
 
 NOTFOUND = 404
 CONFLICT = 409
@@ -132,6 +131,7 @@ def is_token():
 def validate_user_cardentials():
     user = req.body.username
     pwd = req.body.password
+
 
     # return 400 status if username/password is not exist
     if (user == None or pwd == None):
