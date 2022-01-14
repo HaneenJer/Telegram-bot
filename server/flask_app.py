@@ -39,6 +39,32 @@ def delete_user():
     return Response("user removed", status=OK)
     pass
 
+
+@app.route('/admins', methods=['GET'])
+def get_admins():
+    admins = db_fetch_Admins()
+    print(admins)
+    admins_list = []
+    for admin in admins:
+        admins_list.append(format_admin(admin))
+    {'admins': admins_list}
+    return {'admins': admins_list}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class admin_data:
     userId = "789789",
     password= "236369",

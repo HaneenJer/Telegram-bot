@@ -1,42 +1,32 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { getUser, removeUserSession } from './Utils/Common';
+import axios from 'axios';
 
-import EditTodo from "./EditTodo";
 import './Dashboard.css';
 
+const baseUrl = "http://localhost:5000"
+
 function Dashboard(props){
-  const [todos, setTodos] = useState([]);
+  const [adminsList, setAdminsList] = useState([]);
 
-  //delete todo function
 
-  const deleteTodo = async id => {
+  const fetchAdmins = async () => {
     try {
-      const deleteTodo = await fetch(`http://localhost:5000/todos/${id}`, {
-        method: "DELETE"
-      });
-
-      setTodos(todos.filter(todo => todo.todo_id !== id));
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-
-  const getTodos = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/todos");
-      const jsonData = await response.json();
-
-      setTodos(jsonData);
+      const data = await axios.get('http://localhost:5000/admins')
+      console.error(data);
+      const {admins} = data.data
+      setAdminsList(admins);
     } catch (err) {
       console.error(err.message);
     }
   };
 
   useEffect(() => {
-    getTodos();
+    fetchAdmins();
   }, []);
 
-  console.log(todos);
+  console.log(adminsList)
+
 
   const user = getUser();
 
@@ -66,15 +56,9 @@ function Dashboard(props){
           </tr>
         </thead>
         <tbody>
-          {<tr>
-            <td>admin</td>
-          </tr> }
-          {todos.map(todo => (
-            <tr key={todo.todo_id}>
-              <td>{todo.description}</td>
-              <td>
-                <EditTodo todo={todo} />
-              </td>
+          {adminsList.map(admin => (
+            <tr key={admin.username}>
+              <td>{admin.username}</td>
             </tr>
           ))}
         </tbody>
