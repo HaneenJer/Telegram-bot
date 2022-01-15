@@ -43,13 +43,7 @@ function Dashboard(props) {
     // handle click event of add new admin button
     const handleAddAdmin = async () => {
         const admin = {username, password}
-        console.log("username: ", username, " password: ", password);
-        console.log("this is stringify ", JSON.stringify(admin))
-        const response = await axios.post('http://localhost:5000/admins', admin)
-        if (response.ok) {
-            console.log("response worked");
-        }
-        console.log("this is the adminsList - after change", adminsList)
+        await axios.post('http://localhost:5000/admins', admin)
     }
 
 
