@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect, useState} from "react";
-import {getUser, removeUserSession} from './Utils/Common';
+import {getUser, removeUserSession, setUserSession} from './Utils/Common';
 import axios from 'axios';
 
 import './Dashboard.css';
@@ -22,7 +22,7 @@ function Dashboard(props) {
         }
     };
 
-        const fetchPolls = async () => {
+    const fetchPolls = async () => {
         try {
             const data = await axios.get('http://localhost:5000/polls', user.name);
             const {polls} = data.data
@@ -35,6 +35,7 @@ function Dashboard(props) {
     useEffect(() => {
         fetchAdmins();
         fetchPolls();
+        // fetchPolls().then(r => pollsList);
     }, []);
 
     const user = getUser();
@@ -50,6 +51,10 @@ function Dashboard(props) {
         const admin = {username, password}
         await axios.post('http://localhost:5000/admins', admin)
         await fetchAdmins();
+    }
+
+    const handleAddNewPoll = () => {
+        props.history.push(user.name+'/addPoll')
     }
 
     return (
@@ -81,14 +86,14 @@ function Dashboard(props) {
                 <div>
                     username<br/>
                     <input placeholder="username"
-                    value={username}
-                    onChange={e => setUsername(e.target.value)}/>
+                           value={username}
+                           onChange={e => setUsername(e.target.value)}/>
                 </div>
                 <div style={{marginTop: 10}}>
                     password<br/>
                     <input placeholder="password"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}/>
+                           value={password}
+                           onChange={e => setPassword(e.target.value)}/>
                 </div>
                 <input type="button" value={'Add new admin!'} onClick={handleAddAdmin}/><br/>
             </div>
@@ -103,16 +108,17 @@ function Dashboard(props) {
                     </thead>
                     <tbody>
                     {pollsList.map(polls => (
-                            <tr key={polls.poll_id}>
+                        <tr key={polls.poll_id}>
                             <td>{polls.poll_id}</td>
-                             <td>{polls.description}</td>
+                            <td>{polls.description}</td>
                         </tr>
                     ))}
                     </tbody>
                 </table>
+                <input type="button" value={'Add new poll!'} onClick={handleAddNewPoll}/><br/>
             </div>
         </Fragment>
-
     );
 }
+
 export default Dashboard;
