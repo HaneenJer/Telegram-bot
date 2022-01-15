@@ -15,6 +15,12 @@ class Admin(db.Model):
     password = db.Column(db.String(255))
 
 
+class Polls(db.Model):
+    __tablename__ = 'polls'
+    poll_id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(500))
+
+
 def db_add_usr(chat_id, username):
     try:
         user = User(chat_id=chat_id, username=username)
@@ -31,6 +37,16 @@ def db_add_usr(chat_id, username):
 
 def add_first_admin():
     db_add_admin(username="admin", password="236369")
+
+
+def db_fetch_polls():
+    try:
+        polls = Polls.query.all()
+        if polls is None:
+            return -1
+        return polls
+    except Exception:
+        db.session.rollback()
 
 
 def db_add_admin(username, password):
@@ -59,6 +75,13 @@ def format_admin(Admin):
     return {
         "name": Admin.name,
         "password": Admin.password
+    }
+
+
+def format_polls(Polls):
+    return {
+        "poll_id": Polls.poll_id,
+        "description": Polls.description
     }
 
 

@@ -8,6 +8,7 @@ import './Dashboard.css';
 
 function Dashboard(props) {
     const [adminsList, setAdminsList] = useState([]);
+    const [pollsList, setPollsList] = useState([]);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
@@ -21,8 +22,19 @@ function Dashboard(props) {
         }
     };
 
+        const fetchPolls = async () => {
+        try {
+            const data = await axios.get('http://localhost:5000/polls', user.name);
+            const {polls} = data.data
+            setPollsList(polls);
+        } catch (err) {
+            console.error(err.message);
+        }
+    };
+
     useEffect(() => {
         fetchAdmins();
+        fetchPolls();
     }, []);
 
     const user = getUser();
@@ -37,7 +49,7 @@ function Dashboard(props) {
     const handleAddAdmin = async () => {
         const admin = {username, password}
         await axios.post('http://localhost:5000/admins', admin)
-        fetchAdmins();
+        await fetchAdmins();
     }
 
     return (
@@ -52,7 +64,7 @@ function Dashboard(props) {
             {" "}
             <div align="center">
                 <h3> Existing admins table:</h3>
-                <table className="table mt-5 text-center">
+                <table className>
                     <thead>
                     <tr>
                         <th>username</th>
@@ -60,7 +72,6 @@ function Dashboard(props) {
                     </thead>
                     <tbody>
                     {adminsList.map(admin => (
-
                         <tr key={admin.name}>
                             <td>{admin.name}</td>
                         </tr>
@@ -80,6 +91,25 @@ function Dashboard(props) {
                     onChange={e => setPassword(e.target.value)}/>
                 </div>
                 <input type="button" value={'Add new admin!'} onClick={handleAddAdmin}/><br/>
+            </div>
+            <div align="center">
+                <h3> Polls table:</h3>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>polls</th>
+                        <th>Description</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {pollsList.map(polls => (
+                            <tr key={polls.poll_id}>
+                            <td>{polls.poll_id}</td>
+                             <td>{polls.description}</td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
             </div>
         </Fragment>
 

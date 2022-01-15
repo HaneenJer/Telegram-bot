@@ -53,6 +53,19 @@ def get_admins():
     return {'admins': admins_list}
 
 
+@app.route('/polls', methods=['GET'])
+def get_polls():
+    data = request.get_json()
+    print("data: ", data)
+    polls = db_fetch_polls()
+    print("polls: ", polls)
+    polls_list = []
+    for poll in polls:
+        polls_list.append(format_polls(poll))
+    print("this is the list of polls returned to react: ", polls_list)
+    return {'polls': polls_list}
+
+
 @app.route('/admins', methods=['POST'])
 def add_admin():
     data = request.get_json()
@@ -71,10 +84,9 @@ class admin_data:
     username = "admin",
     isAdmin = True
 
+
 # static user details
 admin = admin_data()
-
-
 
 # require('dotenv').config();
 # express = require('express');
@@ -92,10 +104,9 @@ admin = admin_data()
 # app.use(bodyParser.urlencoded({ extended: true }));
 
 
-
 # TODO: check the functions
-#middleware that checks if JWT token exists and verifies it if it does exist.
-#In all future routes, this helps to know if the request is authenticated or not.
+# middleware that checks if JWT token exists and verifies it if it does exist.
+# In all future routes, this helps to know if the request is authenticated or not.
 
 # def validate_user(err, user):
 #     if err:
