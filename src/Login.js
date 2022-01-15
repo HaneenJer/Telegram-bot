@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { setUserSession } from './Utils/Common';
-import Home from "./Home";
-import {Route} from "react-router-dom";
 
 function Login(props) {
   const [loading, setLoading] = useState(false);

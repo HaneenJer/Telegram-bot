@@ -3,7 +3,7 @@ from flask_cors import CORS
 from database import *
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:i4gw6RHK@localhost:5432/tele_polls'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost:5432/tele_polls'
 app.config['SECRET_KEY'] = 'g34jdk9018220dd'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 CORS(app)
@@ -17,6 +17,7 @@ OK = 200
 def init():
     with app.app_context():
         create_db(app)
+        add_first_admin()
 
 
 @app.route('/register', methods=['POST'])
@@ -48,31 +49,18 @@ def get_admins():
     admins_list = []
     for admin in admins:
         admins_list.append(format_admin(admin))
-    {'admins': admins_list}
     return {'admins': admins_list}
 
 
 @app.route('/admins', methods=['POST'])
 def add_admin():
-    status = db_add_admin(username=request.args.get("username"),password=request.args.get("password"))
+    data = request.get_json()
+    username = data["username"]
+    password = data["password"]
+    status = db_add_admin(username=username, password=password)
     if status == -1:
         return Response("this admin is already registered", status=CONFLICT)
     return Response("admin added", status=OK)
-    pass
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 class admin_data:

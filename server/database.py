@@ -29,6 +29,10 @@ def db_add_usr(chat_id, username):
         db.session.rollback()
 
 
+def add_first_admin():
+    db_add_admin(username="admin", password="236369")
+
+
 def db_add_admin(username, password):
     try:
         admin = Admin(password=password, name=username)
