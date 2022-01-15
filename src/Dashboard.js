@@ -14,7 +14,6 @@ function Dashboard(props) {
     const fetchAdmins = async () => {
         try {
             const data = await axios.get('http://localhost:5000/admins');
-            console.log("this is the list of admins", data);
             const {admins} = data.data
             setAdminsList(admins);
         } catch (err) {
@@ -38,6 +37,7 @@ function Dashboard(props) {
     const handleAddAdmin = async () => {
         const admin = {username, password}
         await axios.post('http://localhost:5000/admins', admin)
+        fetchAdmins();
     }
 
     return (
@@ -60,8 +60,9 @@ function Dashboard(props) {
                     </thead>
                     <tbody>
                     {adminsList.map(admin => (
-                        <tr key={admin.username}>
-                            <td>{admin.username}</td>
+
+                        <tr key={admin.name}>
+                            <td>{admin.name}</td>
                         </tr>
                     ))}
                     </tbody>

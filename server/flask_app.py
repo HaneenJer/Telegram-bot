@@ -49,6 +49,7 @@ def get_admins():
     admins_list = []
     for admin in admins:
         admins_list.append(format_admin(admin))
+    print("this is the list of admins returned to react: ", admins_list)
     return {'admins': admins_list}
 
 
@@ -65,9 +66,9 @@ def add_admin():
 
 class admin_data:
     userId = "789789",
-    password= "236369",
-    name= "Admin",
-    username= "admin",
+    password = "236369",
+    name = "Admin",
+    username = "admin",
     isAdmin = True
 
 # static user details
