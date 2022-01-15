@@ -4,20 +4,17 @@ import axios from 'axios';
 
 import './Dashboard.css';
 
-const baseUrl = "http://localhost:5000"
+// const baseUrl = "http://localhost:5000"
 
 function Dashboard(props) {
     const [adminsList, setAdminsList] = useState([]);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    // const username = useFormInput('');
-    // const password = useFormInput('');
 
     const fetchAdmins = async () => {
         try {
             const data = await axios.get('http://localhost:5000/admins');
             console.log("this is the list of admins", data);
-            // console.error(data);
             const {admins} = data.data
             setAdminsList(admins);
         } catch (err) {
@@ -28,9 +25,6 @@ function Dashboard(props) {
     useEffect(() => {
         fetchAdmins();
     }, []);
-
-
-
 
     const user = getUser();
 
@@ -46,9 +40,7 @@ function Dashboard(props) {
         await axios.post('http://localhost:5000/admins', admin)
     }
 
-
     return (
-
         <Fragment>
             <div>
                 Welcome {user.name}!<br/><br/>
@@ -79,14 +71,12 @@ function Dashboard(props) {
                     <input placeholder="username"
                     value={username}
                     onChange={e => setUsername(e.target.value)}/>
-                    {/*<input type="text" autoComplete="new-admin"/>*/}
                 </div>
                 <div style={{marginTop: 10}}>
                     password<br/>
                     <input placeholder="password"
                     value={password}
                     onChange={e => setPassword(e.target.value)}/>
-                    {/*<input type="password" autoComplete="new-password"/>*/}
                 </div>
                 <input type="button" value={'Add new admin!'} onClick={handleAddAdmin}/><br/>
             </div>
@@ -94,6 +84,4 @@ function Dashboard(props) {
 
     );
 }
-
-
 export default Dashboard;
