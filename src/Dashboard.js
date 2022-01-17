@@ -11,6 +11,7 @@ function Dashboard(props) {
     const [pollsList, setPollsList] = useState([]);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const pollName = useFormInput('');
 
     const fetchAdmins = async () => {
         try {
@@ -21,6 +22,9 @@ function Dashboard(props) {
             console.error(err.message);
         }
     };
+
+
+
 
     const fetchPolls = async () => {
         try {
@@ -55,6 +59,10 @@ function Dashboard(props) {
 
     const handleAddNewPoll = () => {
         props.history.push(user.name+'/addPoll')
+    }
+
+    const handleViewPoll = () => {
+        props.history.push('/myPoll');
     }
 
     return (
@@ -98,7 +106,7 @@ function Dashboard(props) {
                 <input type="button" value={'Add new admin!'} onClick={handleAddAdmin}/><br/>
             </div>
             <div align="center">
-                <h3> Polls table:</h3>
+                <h3> My Polls:</h3>
                 <table>
                     <thead>
                     <tr>
@@ -115,10 +123,24 @@ function Dashboard(props) {
                     ))}
                     </tbody>
                 </table>
+                <input type="text" {...pollName} placeholder="poll id" />
+                <input type="button" value={'view poll statistics'} onClick={handleViewPoll} /><br />
                 <input type="button" value={'Add new poll!'} onClick={handleAddNewPoll}/><br/>
             </div>
         </Fragment>
     );
 }
+
+    const useFormInput = initialValue => {
+          const [value, setValue] = useState(initialValue);
+
+          const handleChange = e => {
+            setValue(e.target.value);
+          }
+          return {
+            value,
+            onChange: handleChange
+          }
+    }
 
 export default Dashboard;

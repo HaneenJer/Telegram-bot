@@ -5,10 +5,12 @@ import axios from 'axios';
 import Login from './Login';
 import Dashboard from './Dashboard';
 import Home from './Home';
+import MyPoll from "./MyPoll";
 
 import PrivateRoute from './Utils/PrivateRoute';
 import PublicRoute from './Utils/PublicRoute';
 import { getToken, removeUserSession, setUserSession } from './Utils/Common';
+
 
 function App() {
   const [authLoading, setAuthLoading] = useState(true);
@@ -40,12 +42,14 @@ function App() {
             <NavLink exact activeClassName="active" to="/">Home</NavLink>
             <NavLink activeClassName="active" to="/login">Login</NavLink><small>(Access without token only)</small>
             <NavLink activeClassName="active" to="/dashboard">Dashboard</NavLink><small>(Access with token only)</small>
+            <NavLink activeClassName="active" to="/myPoll">MyPoll</NavLink><small>(Access with token only)</small>
           </div>
           <div className="content">
             <Switch>
               <Route exact path="/" component={Home} />
               <PublicRoute path="/login" component={Login} />
               <PrivateRoute path="/dashboard" component={Dashboard} />
+              <PrivateRoute path="/myPoll" component={MyPoll} />
             </Switch>
           </div>
         </div>
