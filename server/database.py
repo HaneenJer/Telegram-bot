@@ -21,6 +21,20 @@ class Polls(db.Model):
     description = db.Column(db.String(500))
 
 
+class PollsOptions(db.Model):
+    """this table holds the data of each poll and the options for that poll"""
+    __tablename__ = 'polloptions'
+    poll_id = db.Column(db.Integer, db.ForeignKey('polls.poll_id'), primary_key=True, nullable=False)
+    ans_num = db.Column(db.Integer, primary_key=True)
+    ans_des = db.Column(db.String(500))
+
+class UserAnswers(db.Model):
+    __tablename__ = 'useranswers'
+    user_id = db.Column(db.Integer, db.ForeignKey('users.chat_id'), primary_key=True, nullable=False)
+    poll_id = db.Column(db.Integer, db.ForeignKey('polls.poll_id'), primary_key=True, nullable=False)
+    ans_num = db.Column(db.Integer)
+
+
 def db_add_usr(chat_id, username):
     try:
         user = User(chat_id=chat_id, username=username)
