@@ -118,21 +118,32 @@ app.post('/users/signin', function (req, res) {
 
     // return 401 status if the credential is not match.
     //if (user !== userData.username || pwd !== userData.password) {
+    console.log('isAdmin')
+    console.log(isAdmin)
     if (isAdmin === 0) {
       return res.status(401).json({
         error: true,
         message: "Username or Password is Wrong."
       });
     }
+    else{
+      userData.name = user;
+      userData.username = user;
+      userData.password = pwd;
+      console.log(userData)
+
+    }
+    // generate token
+
+    const token = utils.generateToken(userData);
+    // get basic user details
+    const userObj = utils.getCleanUser(userData);
+    console.log(userObj);
+    // return the token along with user details
+    return res.json({ user: userObj, token });
   });
 
 
-  // generate token
-  const token = utils.generateToken(userData);
-  // get basic user details
-  const userObj = utils.getCleanUser(userData);
-  // return the token along with user details
-  return res.json({ user: userObj, token });
 });
 
 
