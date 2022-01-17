@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect, useState} from "react";
-import {getUser, removeUserSession, setUserSession} from './Utils/Common';
+import {getUser, removeUserSession, setUserSession,setPoll} from './Utils/Common';
 import axios from 'axios';
 
 import './Dashboard.css';
@@ -11,7 +11,7 @@ function Dashboard(props) {
     const [pollsList, setPollsList] = useState([]);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const pollName = useFormInput('');
+    const pollId = useFormInput('');
 
     const fetchAdmins = async () => {
         try {
@@ -62,6 +62,7 @@ function Dashboard(props) {
     }
 
     const handleViewPoll = () => {
+        setPoll(pollId.value);
         props.history.push('/myPoll');
     }
 
@@ -123,7 +124,7 @@ function Dashboard(props) {
                     ))}
                     </tbody>
                 </table>
-                <input type="text" {...pollName} placeholder="poll id" />
+                <input type="text" {...pollId} placeholder="poll id" />
                 <input type="button" value={'view poll statistics'} onClick={handleViewPoll} /><br />
                 <input type="button" value={'Add new poll!'} onClick={handleAddNewPoll}/><br/>
             </div>

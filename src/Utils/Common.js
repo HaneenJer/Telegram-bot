@@ -21,3 +21,19 @@ export const setUserSession = (token, user) => {
   sessionStorage.setItem('token', token);
   sessionStorage.setItem('user', JSON.stringify(user));
 }
+
+// remove the poll_id in the session storage
+export const removePoll = () => {
+  sessionStorage.removeItem('poll_id');
+}
+
+// set the poll_id in the session storage
+export const setPoll = (pollId) => {
+  sessionStorage.setItem('pollId', pollId);
+}
+
+
+// return the poll_id the session storage
+export const getPollId = () => {
+  return sessionStorage.getItem('pollId');
+}
