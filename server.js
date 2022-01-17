@@ -102,7 +102,11 @@ app.post('/users/signin', function (req, res) {
     admins = result;
     var isAdmin = 0;
     var adminsLength = admins.length;
-    for (var i = 0; i < adminsLength; i++) {
+    for (i = 0; i < adminsLength; i++) {
+      console.log('i')
+      console.log(i)
+      console.log('admins[i]')
+      console.log(admins[i])
       Object.entries(admins[i]).forEach(([key, value]) => {
         if (key === 'name' && value === user) {
           isAdmin = 1;
@@ -115,11 +119,9 @@ app.post('/users/signin', function (req, res) {
         i = adminsLength
       }
     }
-
+    i = 0;
     // return 401 status if the credential is not match.
     //if (user !== userData.username || pwd !== userData.password) {
-    console.log('isAdmin')
-    console.log(isAdmin)
     if (isAdmin === 0) {
       return res.status(401).json({
         error: true,
@@ -130,11 +132,8 @@ app.post('/users/signin', function (req, res) {
       userData.name = user;
       userData.username = user;
       userData.password = pwd;
-      console.log(userData)
-
     }
     // generate token
-
     const token = utils.generateToken(userData);
     // get basic user details
     const userObj = utils.getCleanUser(userData);
