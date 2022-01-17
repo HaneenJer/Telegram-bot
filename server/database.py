@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Sequence, func
 
 db = SQLAlchemy()
-
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -15,9 +15,9 @@ class Admin(db.Model):
     password = db.Column(db.String(255))
 
 
-class Polls(db.Model):
+class Poll(db.Model):
     __tablename__ = 'polls'
-    poll_id = db.Column(db.Integer, primary_key=True)
+    poll_id = db.Column(db.Integer, primary_key=True,)
     description = db.Column(db.String(500))
 
 
@@ -28,12 +28,20 @@ class PollsOptions(db.Model):
     ans_num = db.Column(db.Integer, primary_key=True)
     ans_des = db.Column(db.String(500))
 
+
 class UserAnswers(db.Model):
     __tablename__ = 'useranswers'
     user_id = db.Column(db.Integer, db.ForeignKey('users.chat_id'), primary_key=True, nullable=False)
     poll_id = db.Column(db.Integer, db.ForeignKey('polls.poll_id'), primary_key=True, nullable=False)
     ans_num = db.Column(db.Integer)
 
+def get_last_poll_id():
+    all_polls = db_fetch_polls()
+    if all_polls == -1:
+        curr_poll = 1
+    else:
+        curr_poll = len(all_polls) + 1
+    return curr_poll
 
 def db_add_usr(chat_id, username):
     try:
@@ -55,7 +63,7 @@ def add_first_admin():
 
 def db_fetch_polls():
     try:
-        polls = Polls.query.all()
+        polls = Poll.query.all()
         if polls is None:
             return -1
         return polls
@@ -73,6 +81,15 @@ def db_add_admin(username, password):
         db.session.commit()
     except Exception:
         db.session.rollback()
+
+def db_add_poll(id ,description):
+    try:
+        poll = Poll(poll_id=id, description=description)
+        db.session.add(poll, description)
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+
 
 
 def db_fetch_admins():

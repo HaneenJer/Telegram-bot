@@ -12,12 +12,14 @@ NOTFOUND = 404
 CONFLICT = 409
 OK = 200
 
-
+curr_poll = 0
 @app.before_first_request
 def init():
     with app.app_context():
         create_db(app)
         add_first_admin()
+        global curr_poll
+        curr_poll = get_last_poll_id()
 
 
 @app.route('/register', methods=['POST'])
@@ -77,6 +79,14 @@ def add_admin():
     return Response("admin added", status=OK)
 
 
+@app.route('/polls', methods=['POST'])
+def add_poll():
+    data = request.get_json()
+    description = data["pollDesc"]
+    db_add_poll(curr_poll,description)
+    return Response("poll added", status=OK)
+
+
 class admin_data:
     userId = "789789",
     password = "236369",
@@ -87,23 +97,6 @@ class admin_data:
 
 # static user details
 admin = admin_data()
-
-# require('dotenv').config();
-# express = require('express');
-# cors = require('cors');
-# bodyParser = require('body-parser');
-# jwt = require('jsonwebtoken');
-# utils = require('./utils');
-
-
-# # enable CORS
-# app.use(cors());
-# # parse application/json
-# app.use(bodyParser.json());
-# # parse application/x-www-form-urlencoded
-# app.use(bodyParser.urlencoded({ extended: true }));
-
-
 
 if __name__ == '__main__':
     app.debug = True
