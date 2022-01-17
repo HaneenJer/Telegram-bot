@@ -6,6 +6,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const utils = require('./utils');
+const axios = require("axios");
 
 
 const app = express();
@@ -21,7 +22,31 @@ const userData = {
 };
 
 
-
+  let admins = [];
+  let i = 0;
+  async function fetchAdmins(){
+        try {
+            const data = await axios.get('http://localhost:5000/admins');
+            const {admins} = data.data
+            //console.log(admins);
+            Object.entries(admins).forEach((entry) => {
+              const [key, value] = entry;
+              //console.log(`entry: `);
+              //console.log(entry);
+              //console.log(`key: `);
+              //console.log(key);
+              //console.log(`value: `);
+              //console.log(value);
+              admins[i] = value;
+              //console.log(`admins[i]: `);
+              //console.log(admins[i]);
+              i = i +1;
+            });
+            return Promise.all(admins);
+        } catch (err) {
+            console.error(err.message);
+        }
+    };
 
 // enable CORS
 app.use(cors());
@@ -72,14 +97,35 @@ app.post('/users/signin', function (req, res) {
       message: "Username or Password required."
     });
   }
+  let isAdmin = 0;
+  fetchAdmins().then(function(result) {
+    admins = result;
+    var isAdmin = 0;
+    var adminsLength = admins.length;
+    for (var i = 0; i < adminsLength; i++) {
+      Object.entries(admins[i]).forEach(([key, value]) => {
+        if (key === 'name' && value === user) {
+          isAdmin = 1;
+        }
+        if (key === 'password' && value !== pwd) {
+          isAdmin = 0;
+        }
+      });
+      if (isAdmin === 1) {
+        i = adminsLength
+      }
+    }
 
-  // return 401 status if the credential is not match.
-  if (user !== userData.username || pwd !== userData.password) {
-    return res.status(401).json({
-      error: true,
-      message: "Username or Password is Wrong."
-    });
-  }
+    // return 401 status if the credential is not match.
+    //if (user !== userData.username || pwd !== userData.password) {
+    if (isAdmin === 0) {
+      return res.status(401).json({
+        error: true,
+        message: "Username or Password is Wrong."
+      });
+    }
+  });
+
 
   // generate token
   const token = utils.generateToken(userData);
