@@ -20,6 +20,13 @@ class Polls(db.Model):
     poll_id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(500))
 
+class UserAnswers(db.Model):
+    __tablename__ = 'userAnswers'
+    user_id = db.Column(db.Integer,db.ForeignKey('users.chat_id'),primary_key = True)
+    poll_id = db.Column(db.Integer, db.ForeignKey('polls.poll_id'), primary_key=True)
+    ans_num = db.Column(db.Integer)
+
+
 
 def db_add_usr(chat_id, username):
     try:
@@ -75,6 +82,30 @@ def format_admin(Admin):
     return {
         "name": Admin.name,
         "password": Admin.password
+    }
+
+def db_fetch_poll_answers(poll_id):
+    try:
+        #answers = UserAnswers.query.filter_by(UserAnswers.poll_id ==  poll_id).all()
+        #answers = UserAnswers.query.all()
+        answers = Admin.query.all()
+        print('database answers: ' + answers)
+        if answers is None:
+            return -1
+        return answers
+    except Exception:
+        print('exception! ')
+        template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+        message = template.format(type(Exception).__name__, Exception.args)
+        print(message)
+        db.session.rollback()
+
+
+def format_answer(UserAnswers):
+    return {
+        "user_id": UserAnswers.user_id,
+        "poll_id": UserAnswers.poll_id,
+        "answer_num": UserAnswers.answer_num
     }
 
 

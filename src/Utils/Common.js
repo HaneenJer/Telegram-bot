@@ -32,8 +32,17 @@ export const setPoll = (pollId) => {
   sessionStorage.setItem('pollId', pollId);
 }
 
+// set the poll_id in the session storage
+export const setPollDescription = (pollDescription) => {
+  sessionStorage.setItem('pollDescription', pollDescription);
+}
+
 
 // return the poll_id the session storage
 export const getPollId = () => {
-  return sessionStorage.getItem('pollId');
+  return sessionStorage.getItem('pollId') || null;
+}
+  // return the poll description the session storage
+export const getPollDescription = () => {
+  return sessionStorage.getItem('pollDescription')|| null;
 }

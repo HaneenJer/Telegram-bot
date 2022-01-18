@@ -52,6 +52,19 @@ def get_admins():
     print("this is the list of admins returned to react: ", admins_list)
     return {'admins': admins_list}
 
+@app.route('/answers', methods=['GET'])
+def get_answers():
+    print(request.args.keys())
+    pollId = request.args.get('pollId');
+    print('pollId: ' + pollId)
+    answers = db_fetch_poll_answers(pollId)
+    #print('answers: ' + answers)
+    answers_list = []
+    for answer in answers:
+        answers_list.append(format_answer(answer))
+    print("this is the list of answers returned to react: ", answers_list)
+    return {'answers_list': answers_list}
+
 
 @app.route('/polls', methods=['GET'])
 def get_polls():
