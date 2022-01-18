@@ -1,10 +1,11 @@
 import React, {Fragment, useEffect, useState} from "react";
+
 import {getUser, removeUserSession, setUserSession,setPoll} from './Utils/Common';
+
 import axios from 'axios';
 
 import './Dashboard.css';
 
-// const baseUrl = "http://localhost:5000"
 
 function Dashboard(props) {
     const [adminsList, setAdminsList] = useState([]);
@@ -40,7 +41,6 @@ function Dashboard(props) {
     useEffect(() => {
         fetchAdmins();
         fetchPolls();
-        // fetchPolls().then(r => pollsList);
     }, []);
 
     const user = getUser();
@@ -59,7 +59,7 @@ function Dashboard(props) {
     }
 
     const handleAddNewPoll = () => {
-        props.history.push(user.name+'/addPoll')
+        props.history.push('/addPoll')
     }
 
     const handleViewPoll = () => {
@@ -81,7 +81,7 @@ function Dashboard(props) {
             <div class="grid-container">
             <div align="center">
                 <h3> Existing admins table:</h3>
-                <table className>
+                <table >
                     <thead>
                     <tr>
                         <th>username</th>

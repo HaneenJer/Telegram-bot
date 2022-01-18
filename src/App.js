@@ -6,6 +6,8 @@ import Login from './Login';
 import Dashboard from './Dashboard';
 import Home from './Home';
 import MyPoll from "./MyPoll";
+import AddPoll from "./addPoll";
+
 
 import PrivateRoute from './Utils/PrivateRoute';
 import PublicRoute from './Utils/PublicRoute';
@@ -39,17 +41,24 @@ function App() {
       <BrowserRouter>
         <div>
           <div className="header">
+
             <NavLink exact activeClassName="active" to="/">Home</NavLink><small>(Public page)</small>
             <NavLink activeClassName="active" to="/login">Login</NavLink><small>(Public page)</small>
             <NavLink activeClassName="active" to="/dashboard">Dashboard</NavLink><small>(Private page)</small>
             <NavLink activeClassName="active" to="/myPoll">MyPoll</NavLink><small>(Private page)</small>
+            <NavLink activeClassName="active" to="/addPoll">Add Poll</NavLink><small>(Private page)</small>
+
           </div>
           <div className="content">
             <Switch>
               <Route exact path="/" component={Home} />
               <PublicRoute path="/login" component={Login} />
               <PrivateRoute path="/dashboard" component={Dashboard} />
+
               <PrivateRoute path="/myPoll" component={MyPoll} />
+
+              <PrivateRoute path="/addPoll" component={AddPoll} />
+
             </Switch>
           </div>
         </div>
