@@ -59,7 +59,7 @@ function Dashboard(props) {
     }
 
     const handleAddNewPoll = () => {
-        props.history.push(user.name+'/addPoll')
+        props.history.push('/addPoll')
     }
 
     const handleViewPoll = () => {
