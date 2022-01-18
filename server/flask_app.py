@@ -83,6 +83,13 @@ def add_poll():
     curr_poll += 1
     return Response("poll added", status=OK)
 
+@app.route('/users', methods=['GET'])
+def get_users():
+    users = db_fetch_users()
+    users_list = []
+    for user in users:
+        users_list.append(format_user(user))
+    return {'users': users_list}
 
 @app.route('/polls', methods=['GET'])
 def get_polls_by_admin():

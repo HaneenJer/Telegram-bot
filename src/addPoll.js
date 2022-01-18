@@ -75,7 +75,10 @@ function AddPoll(props) {
         const poll = {pollDesc, name, inputFeilds, usersList}
         await axios.post('http://localhost:5000/polls', poll)
     }
-
+    const handleCheck = (index) =>{
+    usersList[index]["isChecked"] = true;
+    console.log("this is teh users list data after updating: ", usersList);
+    }
     return (
         <Container>
             <div className="grid-container">
@@ -108,6 +111,27 @@ function AddPoll(props) {
                             </Button>
                         </div>
                     </form>
+                </div>
+                <div>
+                    <h2>Select target audience</h2>
+                    <br/><br/>
+                    <table>
+                        {/*<TablePagination count={10} page={2} onPageChange={2} rowsPerPage={5}/>*/}
+                        <thead>
+                        <tr>
+                            <th>username</th>
+                            <th>select</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {usersList.map((user, index) => (
+                            <tr key={index}>
+                                <td>{user.name}</td>
+                                <td><input type="checkbox" onChange={()=>handleCheck(index)}/></td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </Container>

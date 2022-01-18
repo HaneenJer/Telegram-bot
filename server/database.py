@@ -131,6 +131,13 @@ def format_admin(Admin):
     }
 
 
+def format_user(User):
+    return {
+        "name": User.username,
+        "chat_id": User.chat_id
+    }
+
+
 def db_add_poll(poll_id, admin, description):
     try:
         poll = Polls(poll_id=poll_id, admin_name=admin.lower(), description=description)
@@ -216,6 +223,16 @@ def format_polls(Polls):
         "poll_id": Polls.poll_id,
         "description": Polls.description
     }
+
+
+def db_fetch_users():
+    try:
+        users = User.query.all()
+        if users is None:
+            return -1
+        return users
+    except Exception:
+        db.session.rollback()
 
 
 def db_delete_usr(chat_id, username):
