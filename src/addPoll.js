@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import axios from 'axios';
 
 import './addPoll.css';
 
-function addPoll(props) {
+function AddPoll(props) {
     return (
         <Fragment>
              <div>
@@ -13,4 +13,4 @@ function addPoll(props) {
         </Fragment>)
 }
 
-// export default addPoll();
+export default AddPoll;
