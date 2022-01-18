@@ -84,20 +84,17 @@ def format_admin(Admin):
         "password": Admin.password
     }
 
-def db_fetch_poll_answers(poll_id):
+#def db_fetch_poll_answers(poll_id):
+def db_fetch_poll_answers():
+    # try:
+    #     #answers = UserAnswers.query.filter_by(UserAnswers.poll_id ==  poll_id).all()
     try:
-        #answers = UserAnswers.query.filter_by(UserAnswers.poll_id ==  poll_id).all()
-        #answers = UserAnswers.query.all()
-        answers = Admin.query.all()
-        print('database answers: ' + answers)
+        answers = UserAnswers.query.all()
         if answers is None:
+            print('answer is none')
             return -1
         return answers
     except Exception:
-        print('exception! ')
-        template = "An exception of type {0} occurred. Arguments:\n{1!r}"
-        message = template.format(type(Exception).__name__, Exception.args)
-        print(message)
         db.session.rollback()
 
 
@@ -105,7 +102,7 @@ def format_answer(UserAnswers):
     return {
         "user_id": UserAnswers.user_id,
         "poll_id": UserAnswers.poll_id,
-        "answer_num": UserAnswers.answer_num
+        "ans_num": UserAnswers.ans_num
     }
 
 

@@ -23,22 +23,7 @@ ChartJS.register(
 const options = {
     indexAxis: 'x',
     type: 'line',
-    scales: {
-        yAxes: [{
-            display: true,
-            ticks: {
-                suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
-                suggestedMax: 10
-            }
-        }],
-        XAxes: [{
-            display: true,
-            ticks: {
-                suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
-                suggestedMax: 10
-            }
-        }]
-    },
+
     elements: {
       bar: {
         borderWidth: 2,
@@ -120,7 +105,57 @@ const MyPoll =(props) => {
             })
         }
 
-        fetchData();
+    //     const fetchAnswers = async () => {
+    //     try {
+    //         const data = await axios.get('http://localhost:5000/answers',{ params: { pollId: pollId}});
+    //         console.log('data.data');
+    //         console.log(data.data);
+    //         const {answers} = data.data
+    //          console.log('answers');
+    //          console.log(answers);
+    //         setAnswersList(answers);
+    //         console.log('answersList');
+    //         console.log(answersList);
+    //     } catch (err) {
+    //         console.error(err.message);
+    //     }
+    // }
+
+        const fetchAnswers= async()=> {
+           const url = 'http://localhost:5000/answers'
+           const labelSet = []
+           const dataSet1 = [];
+         await fetch(url).then((data)=> {
+             console.log("flask data", data)
+             const res = data.json();
+             return res
+         }).then((res) => {
+             console.log("result", res['answers_list'])
+            for (const val of res['answers_list']) {
+                dataSet1.push(val.ans_num);
+                console.log("val.ans_num", val.ans_num)
+            }
+            console.log("dataSet1", dataSet1)
+            setData({
+                labels:['1','2', '3'],
+                datasets: [
+                  {
+                    label: 'Poll Answers',
+                    data:dataSet1,
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(99, 132, 0.5)',
+                  }
+                ],
+              })
+            console.log("arrData", dataSet1)
+         }).catch(e => {
+                console.log("error", e)
+            })
+        }
+
+       fetchAnswers();
+       fetchData();
+
     },[])
 
     return(
@@ -134,7 +169,7 @@ const MyPoll =(props) => {
             <input type="button" onClick={handleBack} value="Back to my dashboard" align="right"/>
         </p>
         <br/><br/>
-            <div align="center">
+            <div>
                 <Bar data={data} options={options} />
             </div>
          </div>)
