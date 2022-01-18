@@ -19,6 +19,7 @@ class Polls(db.Model):
     __tablename__ = 'polls'
     poll_id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(500))
+    author = db.Column(db.String(500),db.ForeignKey('admins.name'))
 
 class UserAnswers(db.Model):
     __tablename__ = 'userAnswers'
@@ -49,7 +50,7 @@ def add_first_admin():
 def db_fetch_polls(adminName):
     try:
         print('admin name is: ', adminName)
-        polls = Polls.query.all()
+        polls = Polls.query.filter_by(author=adminName)
         if polls is None:
             return -1
         return polls

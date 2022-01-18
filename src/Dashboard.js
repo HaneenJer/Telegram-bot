@@ -30,7 +30,8 @@ function Dashboard(props) {
         try {
             console.log(user.name)
             const admin = {username, password};
-            const data = await axios.get('http://localhost:5000/polls', { username: username.value, password: password.value });
+            console.log('admin')
+            const data = await axios.get('http://localhost:5000/polls', { params: { username: user.username } });
             const {polls} = data.data
             setPollsList(polls);
         } catch (err) {

@@ -12,6 +12,7 @@ NOTFOUND = 404
 CONFLICT = 409
 OK = 200
 
+username = ''
 
 @app.before_first_request
 def init():
@@ -23,6 +24,7 @@ def init():
 @app.route('/register', methods=['POST'])
 def add_user():
     status = db_add_usr(chat_id=int(request.args.get("chat_id")), username=request.args.get("username"))
+    username = request.args.get("username")
     if status == -1:
         return Response("this user is already registered", status=CONFLICT)
     elif status == -2:
@@ -70,10 +72,10 @@ def get_answers():
 
 @app.route('/polls', methods=['GET'])
 def get_polls_by_admin():
-    adminName = request.args.get("username")
+    adminName = request.args.get('username')
     data = request.get_json()
     print("data: ", data)
-    print("adminName: ", adminName)
+    print("username: ", request.args.get('username'))
     polls = db_fetch_polls(adminName)
     print("polls: ", polls)
     polls_list = []
