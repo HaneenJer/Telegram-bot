@@ -55,6 +55,16 @@ def remove(update: Update, context):
     response = requests.delete(rel_url, params=data)
     update.message.reply_text(response.text)
 
+def recieve_poll_ans(update: Update, context):
+    generated_poll_id = update["poll_answer"]["poll_id"]
+    chat_id = update["poll_answer"]["user"]["id"]
+    answer = update["poll_answer"]["option_ids"][0]
+    print("this is the answer: ", answer)
+    rel_url = URL + '/answerPoll'
+    data = {'chat_id': chat_id, 'generated_id': generated_poll_id, 'answer': answer}
+    response = requests.post(rel_url, params=data)
+    update.message.reply_text(response.text)
+
 
 def polls_bot():
     # the updater object enables us to do anything with the bot
@@ -64,6 +74,7 @@ def polls_bot():
     disp.add_handler(CommandHandler("start", start))
     disp.add_handler(CommandHandler("register", register))
     disp.add_handler(CommandHandler("remove", remove))
+    disp.add_handler(PollAnswerHandler(recieve_poll_ans))
 
     updater.start_polling()
     updater.idle()

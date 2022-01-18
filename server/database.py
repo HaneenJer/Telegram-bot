@@ -191,8 +191,7 @@ def db_send_poll(poll_id, description, options, usersList):
     first_req = True
     for user in usersList:
         if user["isChecked"] == True:
-            # send_poll_to_user(poll_id, description, options, user["chat_id"], first_req)
-            print("you reached here")
+            send_poll_to_user(poll_id, description, options, user["chat_id"], first_req)
             first_req = False
 
 

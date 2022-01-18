@@ -36,7 +36,6 @@ function AddPoll(props) {
             console.error(err.message);
         }
     };
-    console.log("this is the users list:", usersList);
 
     useEffect(() => {
         fetchUsers();
@@ -75,10 +74,12 @@ function AddPoll(props) {
         const poll = {pollDesc, name, inputFeilds, usersList}
         await axios.post('http://localhost:5000/polls', poll)
     }
+
     const handleCheck = (index) =>{
     usersList[index]["isChecked"] = true;
-    console.log("this is teh users list data after updating: ", usersList);
     }
+
+     {/*TODO: check how to add icons */}
     return (
         <Container>
             <div className="grid-container">
@@ -106,6 +107,7 @@ function AddPoll(props) {
                             <br/>
                             <Button className={classes.button} variant="contained" color={"primary"} type="submit"
                                 // endIcon={<Send/>}
+
                                     onClick={handleSubmit}>
                                 Add Poll
                             </Button>
@@ -116,7 +118,6 @@ function AddPoll(props) {
                     <h2>Select target audience</h2>
                     <br/><br/>
                     <table>
-                        {/*<TablePagination count={10} page={2} onPageChange={2} rowsPerPage={5}/>*/}
                         <thead>
                         <tr>
                             <th>username</th>
