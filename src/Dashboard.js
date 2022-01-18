@@ -63,6 +63,7 @@ function Dashboard(props) {
 
     const handleViewPoll = () => {
         setPoll(pollId.value);
+
         props.history.push('/myPoll');
     }
 

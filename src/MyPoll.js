@@ -1,35 +1,37 @@
 import React, { Component ,useEffect, useState}  from 'react';
-import {getPollId, getUser, removePoll, removeUserSession} from "./Utils/Common";
+import {getPollDescription, getPollId, getUser, removePoll, removeUserSession} from "./Utils/Common";
 import axios from "axios";
 import {
     Chart as ChartJS,
     CategoryScale,
     LinearScale,
     BarElement,
+    PieController,
     Title,
     Tooltip,
     Legend,
   } from 'chart.js';
 
-import { Bar } from 'react-chartjs-2';
+import { Bar,Pie } from 'react-chartjs-2';
 ChartJS.register(
     CategoryScale,
     LinearScale,
     BarElement,
+    PieController,
     Title,
     Tooltip,
     Legend
   );
 const options = {
     indexAxis: 'x',
+    responsive: true,
     type: 'line',
-
     elements: {
       bar: {
         borderWidth: 2,
       },
     },
-    responsive: true,
+
     plugins: {
       legend: {
         position: 'right',
@@ -38,12 +40,21 @@ const options = {
         display: true,
         text: 'My Poll',
       },
+        xAxes: {
+        display: true,
+        text: 'My Poll',
+      },
+        yAxes: {
+        display: true,
+        text: 'My Poll',
+      },
     },
   };
 
 const MyPoll =(props) => {
-        const [answersList, setAnswersList] = useState([]);
+    const [answersList, setAnswersList] = useState([]);
     const pollId = getPollId();
+    const pollDescription = getPollDescription();
 
     const fetchAnswers = async () => {
         try {
@@ -74,53 +85,6 @@ const MyPoll =(props) => {
         ],
       });
     useEffect(()=> {
-       const fetchData= async()=> {
-           const url = 'https://jsonplaceholder.typicode.com/comments'
-           const labelSet = []
-           const dataSet1 = [];
-         await fetch(url).then((data)=> {
-             console.log("Api data", data)
-             const res = data.json();
-             return res
-         }).then((res) => {
-             console.log("ressss", res)
-            for (const val of res) {
-                dataSet1.push(val.id);
-                // labelSet.push(val.name)
-            }
-            setData({
-                labels:['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-                datasets: [
-                  {
-                    label: 'Dataset ID',
-                    data:dataSet1,
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(99, 132, 0.5)',
-                  }
-                ],
-              })
-            console.log("arrData", dataSet1)
-         }).catch(e => {
-                console.log("error", e)
-            })
-        }
-
-    //     const fetchAnswers = async () => {
-    //     try {
-    //         const data = await axios.get('http://localhost:5000/answers',{ params: { pollId: pollId}});
-    //         console.log('data.data');
-    //         console.log(data.data);
-    //         const {answers} = data.data
-    //          console.log('answers');
-    //          console.log(answers);
-    //         setAnswersList(answers);
-    //         console.log('answersList');
-    //         console.log(answersList);
-    //     } catch (err) {
-    //         console.error(err.message);
-    //     }
-    // }
-
         const fetchAnswers= async()=> {
            const url = 'http://localhost:5000/answers'
            const labelSet = []
