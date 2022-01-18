@@ -3,6 +3,7 @@ import {Container, TextField, makeStyles, IconButton, Button} from "@material-ui
 import {RemoveCircle, AddCircle, Send} from "@material-ui/icons";
 import './addPoll.css';
 import axios from "axios";
+import {getUser} from "./Utils/Common";
 // import {TablePagination} from "@material-ui/core";
 
 
@@ -24,6 +25,8 @@ function AddPoll(props) {
     const [pollDesc, setPollDesc] = useState("")
     const [inputFeilds, setInputFeilds] = useState([{description: ''}, {description: ''},])
     const [usersList, setUsersList] = useState([{username: "", chat_id: "", isChecked: false}]);
+
+    const user = getUser();
 
     const fetchUsers = async () => {
         try {
@@ -60,7 +63,8 @@ function AddPoll(props) {
                 return;
             }
         }
-        const poll = {pollDesc, inputFeilds, usersList}
+        const name = user["name"];
+        const poll = {pollDesc,name, inputFeilds, usersList}
         await axios.post('http://localhost:5000/polls', poll)
 
     }

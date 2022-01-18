@@ -88,9 +88,10 @@ def add_poll():
     data = request.get_json()
     description = data["pollDesc"]
     options = data["inputFeilds"]
+    admin_name = data["name"]
+    db_add_poll(curr_poll, admin_name, description)
     for idx, option in enumerate(options):
         db_add_poll_option(poll_id=curr_poll, ans_id=idx, ans=option["description"])
-    db_add_poll(curr_poll, description)
     db_send_poll(curr_poll, description, options, data["usersList"])
     curr_poll += 1
     return Response("poll added", status=OK)

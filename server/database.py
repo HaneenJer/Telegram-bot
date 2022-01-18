@@ -1,7 +1,6 @@
 import requests
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKeyConstraint
-from sqlalchemy.orm import relationship
 
 db = SQLAlchemy()
 
@@ -9,37 +8,39 @@ db = SQLAlchemy()
 class User(db.Model):
     __tablename__ = 'users'
     chat_id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(255))
+    username = db.Column(db.String())
 
 
 class Admin(db.Model):
     __tablename__ = 'admins'
-    name = db.Column(db.String(255), primary_key=True)
-    password = db.Column(db.String(255))
+    name = db.Column(db.String(), primary_key=True)
+    password = db.Column(db.String())
 
 
 class Poll(db.Model):
     __tablename__ = 'polls'
     poll_id = db.Column(db.Integer, primary_key=True, )
-    description = db.Column(db.String(500))
+    admin_name = db.Column(db.String())
+    description = db.Column(db.String())
+    ForeignKeyConstraint((admin_name,), [Admin.name], ondelete="CASCADE")
 
 
 class PollsOptions(db.Model):
     """this table holds the data of each poll and the options for that poll"""
-    # TODO: add foreign key!! it didnt work
     __tablename__ = 'polloptions'
     poll_id = db.Column(db.Integer, primary_key=True)
-    # poll_id = db.Column(db.Integer, db.ForeignKey('polls.poll_id'), primary_key=True)
     ans_num = db.Column(db.Integer, primary_key=True)
-    ans_des = db.Column(db.String(500))
-    # poll = db.relationship("Poll", foreign_keys=[poll_id])
+    ans_des = db.Column(db.String())
+    ForeignKeyConstraint((poll_id,), [Poll.poll_id], ondelete="CASCADE")
 
 
 class UserAnswers(db.Model):
     __tablename__ = 'useranswers'
-    user_id = db.Column(db.Integer, db.ForeignKey('users.chat_id'), primary_key=True, nullable=False)
-    poll_id = db.Column(db.Integer, db.ForeignKey('polls.poll_id'), primary_key=True, nullable=False)
+    user_id = db.Column(db.Integer, primary_key=True, nullable=False)
+    poll_id = db.Column(db.Integer, primary_key=True, nullable=False)
     ans_num = db.Column(db.Integer)
+    ForeignKeyConstraint((user_id,), [User.chat_id], ondelete="CASCADE")
+    ForeignKeyConstraint((poll_id,), [Poll.poll_id], ondelete="CASCADE")
 
 
 def get_last_poll_id():
@@ -91,9 +92,9 @@ def db_add_admin(username, password):
         db.session.rollback()
 
 
-def db_add_poll(id, description):
+def db_add_poll(poll_id, admin, description):
     try:
-        poll = Poll(poll_id=id, description=description)
+        poll = Poll(poll_id=poll_id, admin_name=admin.lower(), description=description)
         db.session.add(poll)
         db.session.commit()
     except Exception:
