@@ -106,22 +106,6 @@ class admin_data:
 # static user details
 admin = admin_data()
 
-# require('dotenv').config();
-# express = require('express');
-# cors = require('cors');
-# bodyParser = require('body-parser');
-# jwt = require('jsonwebtoken');
-# utils = require('./utils');
-
-
-# # enable CORS
-# app.use(cors());
-# # parse application/json
-# app.use(bodyParser.json());
-# # parse application/x-www-form-urlencoded
-# app.use(bodyParser.urlencoded({ extended: true }));
-
-
 
 if __name__ == '__main__':
     app.debug = True
