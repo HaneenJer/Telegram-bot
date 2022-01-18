@@ -25,7 +25,7 @@ function Login(props) {
 
   return (
     <div>
-      Hello! Welcome to our poll app!<br /><br />
+      Login:<br /><br />
       <div>
         Username<br />
         <input type="text" {...username} autoComplete="new-password" />

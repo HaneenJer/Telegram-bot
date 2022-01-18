@@ -28,6 +28,7 @@ function Dashboard(props) {
 
     const fetchPolls = async () => {
         try {
+            console.log(user.name)
             const data = await axios.get('http://localhost:5000/polls', user.name);
             const {polls} = data.data
             setPollsList(polls);
@@ -69,7 +70,7 @@ function Dashboard(props) {
 
     return (
         <Fragment>
-            <div>
+            <div >
                 Welcome {user.name}!<br/><br/>
                 <p align="right">
                     <input type="button" onClick={handleLogout} value="Logout" align="right"/>
@@ -77,6 +78,7 @@ function Dashboard(props) {
                 <br/><br/>
             </div>
             {" "}
+            <div class="grid-container">
             <div align="center">
                 <h3> Existing admins table:</h3>
                 <table className>
@@ -128,6 +130,7 @@ function Dashboard(props) {
                 <input type="text" {...pollId} placeholder="poll id" />
                 <input type="button" value={'view poll statistics'} onClick={handleViewPoll} /><br />
                 <input type="button" value={'Add new poll!'} onClick={handleAddNewPoll}/><br/>
+            </div>
             </div>
         </Fragment>
     );

@@ -35,10 +35,12 @@ const options = {
     plugins: {
       legend: {
         position: 'right',
+          fontColor: "blue"
       },
       title: {
         display: true,
         text: 'My Poll',
+          fontColor: "blue"
       },
         xAxes: {
         display: true,
@@ -112,6 +114,7 @@ const MyPoll =(props) => {
                     data:[...map.values()],
                     borderColor: 'rgb(255, 99, 132)',
                     backgroundColor: 'rgba(99, 132, 0.5)',
+                      fontColor: "white"
                   }
                 ],
               })

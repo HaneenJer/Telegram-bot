@@ -39,10 +39,10 @@ function App() {
       <BrowserRouter>
         <div>
           <div className="header">
-            <NavLink exact activeClassName="active" to="/">Home</NavLink>
-            <NavLink activeClassName="active" to="/login">Login</NavLink><small>(Access without token only)</small>
-            <NavLink activeClassName="active" to="/dashboard">Dashboard</NavLink><small>(Access with token only)</small>
-            <NavLink activeClassName="active" to="/myPoll">MyPoll</NavLink><small>(Access with token only)</small>
+            <NavLink exact activeClassName="active" to="/">Home</NavLink><small>(Public page)</small>
+            <NavLink activeClassName="active" to="/login">Login</NavLink><small>(Public page)</small>
+            <NavLink activeClassName="active" to="/dashboard">Dashboard</NavLink><small>(Private page)</small>
+            <NavLink activeClassName="active" to="/myPoll">MyPoll</NavLink><small>(Private page)</small>
           </div>
           <div className="content">
             <Switch>
