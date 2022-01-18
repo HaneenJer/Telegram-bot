@@ -46,7 +46,8 @@ def add_first_admin():
     db_add_admin(username="admin", password="236369")
 
 
-def db_fetch_polls():
+def db_fetch_polls(adminName):
+    # TODO: get polls of this admin
     try:
         polls = Polls.query.all()
         if polls is None:
