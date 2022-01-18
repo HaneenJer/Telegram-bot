@@ -43,38 +43,37 @@ function AddPoll(props) {
     }, []);
 
     const handleChangeInput = (index, event) => {
-        // const values = [...inputFeilds];
-        // values[index]["description"] = event.target.value;
-        // setInputFeilds(values);
+        const values = [...inputFeilds];
+        values[index]["description"] = event.target.value;
+        setInputFeilds(values);
     }
     const handleAddOption = () => {
-        // setInputFeilds([...inputFeilds, {description: ''}]);
+        setInputFeilds([...inputFeilds, {description: ''}]);
     }
 
     const handleRemoveOption = () => {
-        // const values = [...inputFeilds];
-        // const len = values.length;
-        // if (len > 2) {
-        //     values.splice(len - 1, 1);
-        //     setInputFeilds(values);
-        // }
+        const values = [...inputFeilds];
+        const len = values.length;
+        if (len > 2) {
+            values.splice(len - 1, 1);
+            setInputFeilds(values);
+        }
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // console.log("input fields: ", inputFeilds);
-        // console.log("description: ", pollDesc);
-        // const values = [...inputFeilds];
-        // for (let i = 0; i < values.length; i++) {
-        //     if (values[i]["description"] === '') {
-        //         alert("You can't submit empty feilds, please fill the relevant options ");
-        //         return;
-        //     }
-        // }
-        // const name = user["name"];
-        // const poll = {pollDesc, name, inputFeilds, usersList}
-        // await axios.post('http://localhost:5000/polls', poll)
-
+        console.log("input fields: ", inputFeilds);
+        console.log("description: ", pollDesc);
+        const values = [...inputFeilds];
+        for (let i = 0; i < values.length; i++) {
+            if (values[i]["description"] === '') {
+                alert("You can't submit empty feilds, please fill the relevant options ");
+                return;
+            }
+        }
+        const name = user["name"];
+        const poll = {pollDesc, name, inputFeilds, usersList}
+        await axios.post('http://localhost:5000/polls', poll)
     }
 
     return (

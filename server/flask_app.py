@@ -12,12 +12,14 @@ NOTFOUND = 404
 CONFLICT = 409
 OK = 200
 
-
+curr_poll = 0
 @app.before_first_request
 def init():
     with app.app_context():
         create_db(app)
         add_first_admin()
+        global curr_poll
+        curr_poll = get_last_poll_id()
 
 
 @app.route('/register', methods=['POST'])
@@ -66,6 +68,20 @@ def get_answers():
         answers_list.append(format_answer(answer))
     print("this is the list of answers returned to react: ", answers_list)
     return {'answers_list': answers_list}
+
+@app.route('/polls', methods=['POST'])
+def add_poll():
+    global curr_poll
+    data = request.get_json()
+    description = data["pollDesc"]
+    options = data["inputFeilds"]
+    admin_name = data["name"]
+    db_add_poll(curr_poll, admin_name, description)
+    for idx, option in enumerate(options):
+        db_add_poll_option(poll_id=curr_poll, ans_id=idx, ans=option["description"])
+    db_send_poll(curr_poll, description, options, data["usersList"])
+    curr_poll += 1
+    return Response("poll added", status=OK)
 
 
 @app.route('/polls', methods=['GET'])
