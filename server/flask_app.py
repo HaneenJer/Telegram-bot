@@ -47,26 +47,18 @@ def delete_user():
 @app.route('/admins', methods=['GET'])
 def get_admins():
     admins = db_fetch_admins()
-    print(admins)
     admins_list = []
     for admin in admins:
         admins_list.append(format_admin(admin))
-    print("this is the list of admins returned to react: ", admins_list)
     return {'admins': admins_list}
 
 @app.route('/answers', methods=['GET'])
 def get_answers():
-    print(request.args.keys())
     pollId = request.args.get('pollId');
-    print('pollId: ' + pollId)
     answers = db_fetch_poll_answers(pollId)
-    #answers = db_fetch_poll_answers()
-    #answers = db_fetch_admins()
-    #print('answers: ' + answers)
     answers_list = []
     for answer in answers:
         answers_list.append(format_answer(answer))
-    print("this is the list of answers returned to react: ", answers_list)
     return {'answers_list': answers_list}
 
 @app.route('/polls', methods=['POST'])
@@ -94,16 +86,11 @@ def get_users():
 @app.route('/polls', methods=['GET'])
 def get_polls_by_admin():
     adminName = request.args.get("author")
-    print('admin name:')
-    print(adminName)
     data = request.get_json()
-    print("data: ", data)
     polls = db_fetch_polls(adminName)
-    print("polls: ", polls)
     polls_list = []
     for poll in polls:
         polls_list.append(format_polls(poll))
-    print("this is the list of polls returned to react: ", polls_list)
     return {'polls': polls_list}
 
 
@@ -116,6 +103,15 @@ def add_admin():
     if status == -1:
         return Response("this admin is already registered", status=CONFLICT)
     return Response("admin added", status=OK)
+
+@app.route('/answerPoll', methods=['POST'])
+def get_poll_ans():
+    chat_id = int(request.args.get("chat_id"))
+    answer = int(request.args.get("answer"))
+    generated_id = request.args.get("generated_id")
+    poll_id = db_get_poll_id(chat_id, generated_id)
+    db_add_user_answer(chat_id, poll_id, answer)
+    return Response("answer added", status=OK)
 
 
 class admin_data:
