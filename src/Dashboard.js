@@ -29,7 +29,8 @@ function Dashboard(props) {
     const fetchPolls = async () => {
         try {
             console.log(user.name)
-            const data = await axios.get('http://localhost:5000/polls', user.name);
+            const admin = {username, password};
+            const data = await axios.get('http://localhost:5000/polls', { username: username.value, password: password.value });
             const {polls} = data.data
             setPollsList(polls);
         } catch (err) {

@@ -70,11 +70,10 @@ def get_answers():
 
 @app.route('/polls', methods=['GET'])
 def get_polls_by_admin():
-    adminName = request.args.get("author")
-    print('admin name:')
-    print(adminName)
+    adminName = request.args.get("username")
     data = request.get_json()
     print("data: ", data)
+    print("adminName: ", adminName)
     polls = db_fetch_polls(adminName)
     print("polls: ", polls)
     polls_list = []
