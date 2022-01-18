@@ -13,11 +13,14 @@ CONFLICT = 409
 OK = 200
 
 
+curr_poll = 0
 @app.before_first_request
 def init():
     with app.app_context():
         create_db(app)
         add_first_admin()
+        global curr_poll
+        curr_poll = get_last_poll_id()
 
 
 @app.route('/register', methods=['POST'])
@@ -42,27 +45,26 @@ def delete_user():
     pass
 
 
+
+
+
 @app.route('/admins', methods=['GET'])
 def get_admins():
     admins = db_fetch_admins()
-    print(admins)
     admins_list = []
     for admin in admins:
         admins_list.append(format_admin(admin))
-    print("this is the list of admins returned to react: ", admins_list)
     return {'admins': admins_list}
+
 
 
 @app.route('/polls', methods=['GET'])
 def get_polls():
     data = request.get_json()
-    print("data: ", data)
     polls = db_fetch_polls()
-    print("polls: ", polls)
     polls_list = []
     for poll in polls:
         polls_list.append(format_polls(poll))
-    print("this is the list of polls returned to react: ", polls_list)
     return {'polls': polls_list}
 
 
@@ -77,6 +79,47 @@ def add_admin():
     return Response("admin added", status=OK)
 
 
+@app.route('/users', methods=['GET'])
+def get_users():
+    users = db_fetch_users()
+    users_list = []
+    for user in users:
+        users_list.append(format_user(user))
+    return {'users': users_list}
+
+
+@app.route('/polls', methods=['POST'])
+def add_poll():
+    global curr_poll
+    data = request.get_json()
+    description = data["pollDesc"]
+    options = data["inputFeilds"]
+    admin_name = data["name"]
+    db_add_poll(curr_poll, admin_name, description)
+    for idx, option in enumerate(options):
+        db_add_poll_option(poll_id=curr_poll, ans_id=idx, ans=option["description"])
+    db_send_poll(curr_poll, description, options, data["usersList"])
+    curr_poll += 1
+    return Response("poll added", status=OK)
+
+
+@app.route('/answerPoll', methods=['POST'])
+def get_poll_ans():
+    chat_id = int(request.args.get("chat_id"))
+    answer = int(request.args.get("answer"))
+    generated_id = request.args.get("generated_id")
+    print("chat id:", chat_id)
+    print("answer:", answer)
+    print("generated_id :", generated_id)
+    # add_user_answer(chat_id, generated_id, answer)
+    return Response("answer added", status=OK)
+
+
+
+
+
+
+
 class admin_data:
     userId = "789789",
     password = "236369",
@@ -87,23 +130,6 @@ class admin_data:
 
 # static user details
 admin = admin_data()
-
-# require('dotenv').config();
-# express = require('express');
-# cors = require('cors');
-# bodyParser = require('body-parser');
-# jwt = require('jsonwebtoken');
-# utils = require('./utils');
-
-
-# # enable CORS
-# app.use(cors());
-# # parse application/json
-# app.use(bodyParser.json());
-# # parse application/x-www-form-urlencoded
-# app.use(bodyParser.urlencoded({ extended: true }));
-
-
 
 if __name__ == '__main__':
     app.debug = True
