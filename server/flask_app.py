@@ -56,9 +56,9 @@ def get_admins():
 def get_answers():
     print(request.args.keys())
     pollId = request.args.get('pollId');
-    #print('pollId: ' + pollId)
-    #answers = db_fetch_poll_answers(pollId)
-    answers = db_fetch_poll_answers()
+    print('pollId: ' + pollId)
+    answers = db_fetch_poll_answers(pollId)
+    #answers = db_fetch_poll_answers()
     #answers = db_fetch_admins()
     #print('answers: ' + answers)
     answers_list = []

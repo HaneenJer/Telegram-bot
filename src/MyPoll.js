@@ -125,7 +125,8 @@ const MyPoll =(props) => {
            const url = 'http://localhost:5000/answers'
            const labelSet = []
            const dataSet1 = [];
-         await fetch(url).then((data)=> {
+           const encodedValue = encodeURIComponent(pollId);
+         await fetch(`http://localhost:5000/answers?pollId=${encodedValue}`).then((data)=> {
              console.log("flask data", data)
              const res = data.json();
              return res
@@ -135,26 +136,29 @@ const MyPoll =(props) => {
                 dataSet1.push(val.ans_num);
                 console.log("val.ans_num", val.ans_num)
             }
+            var dataSet1Unique = [...new Set(dataSet1)];
+            const map = dataSet1.reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map());
             console.log("dataSet1", dataSet1)
+             console.info([...map.values()])
             setData({
-                labels:['1','2', '3'],
+                labels:dataSet1Unique,
                 datasets: [
                   {
                     label: 'Poll Answers',
-                    data:dataSet1,
+                    data:[...map.values()],
                     borderColor: 'rgb(255, 99, 132)',
                     backgroundColor: 'rgba(99, 132, 0.5)',
                   }
                 ],
               })
-            console.log("arrData", dataSet1)
+            console.log("arrData", dataSet1Unique)
          }).catch(e => {
                 console.log("error", e)
             })
         }
 
        fetchAnswers();
-       fetchData();
+       //fetchData();
 
     },[])
 

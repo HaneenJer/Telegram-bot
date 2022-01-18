@@ -84,12 +84,12 @@ def format_admin(Admin):
         "password": Admin.password
     }
 
-#def db_fetch_poll_answers(poll_id):
-def db_fetch_poll_answers():
+def db_fetch_poll_answers(poll_id):
+#def db_fetch_poll_answers():
     # try:
     #     #answers = UserAnswers.query.filter_by(UserAnswers.poll_id ==  poll_id).all()
     try:
-        answers = UserAnswers.query.all()
+        answers = UserAnswers.query.filter_by(poll_id=poll_id)
         if answers is None:
             print('answer is none')
             return -1
