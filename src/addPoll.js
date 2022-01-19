@@ -135,7 +135,7 @@ function AddPoll(props) {
         <Container>
             <div className="grid-container">
                 <div>
-                    <h2>Add Poll</h2>
+                    <h2 >Add Poll </h2>
                     <br/><br/>
                     <form className={classes.root}>
                         <div>

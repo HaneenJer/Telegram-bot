@@ -131,7 +131,7 @@ const MyPoll =(props) => {
 
     return(
 
-        <div style={{width:'80%', height:'50%',align: "right" }}>
+        <div  style={{width:'80%', height:'50%',align: "right" }}>
             {
                 console.log("dataaaaaaaa", data)
             }
@@ -140,7 +140,7 @@ const MyPoll =(props) => {
             <input type="button" onClick={handleBack} value="Back to my dashboard" align="right"/>
         </p>
         <br/><br/>
-            <div>
+            <div class = 'my_poll'>
                 <Bar data={data} options={options} />
             </div>
          </div>)

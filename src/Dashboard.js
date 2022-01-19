@@ -111,8 +111,10 @@ function Dashboard(props) {
                 </div>
                 <input type="button" value={'Add new admin!'} onClick={handleAddAdmin}/><br/>
             </div>
-            <div align="center">
-                <h3> My Polls:</h3>
+            <div  align="center">
+                <div class='my_poll'>
+                    <h3> My Polls:</h3>
+                </div>
                 <table>
                     <thead>
                     <tr>
