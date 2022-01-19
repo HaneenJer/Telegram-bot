@@ -223,6 +223,43 @@ def db_fetch_answers():
         db.session.rollback()
 
 
+def db_fetch_filtered_answers(user_id = -1, poll_id = -1, ans_num = -1):
+    # def db_fetch_poll_answers():
+    # try:
+    #     #answers = UserAnswers.query.filter_by(UserAnswers.poll_id ==  poll_id).all()
+    try:
+        print('database:')
+        print("user_id: ", user_id)
+        print("poll_id: ", poll_id)
+        print("ans_num: ", ans_num)
+        if(user_id != -1):
+            if (poll_id != -1):
+                if (ans_num != -1):
+                    answers = UserAnswers.query.filter_by(user_id=user_id,poll_id=poll_id,ans_num=ans_num)
+                else:
+                    answers = UserAnswers.query.filter_by(user_id=user_id, poll_id=poll_id)
+            else:
+                answers = UserAnswers.query.filter_by(user_id=user_id)
+        else:
+            if (poll_id != -1):
+                if (ans_num != -1):
+                    answers = UserAnswers.query.filter_by(poll_id=poll_id, ans_num=ans_num)
+                else:
+                    answers = UserAnswers.query.filter_by(poll_id=poll_id)
+            else:
+                if (ans_num != -1):
+                    answers = UserAnswers.query.filter_by(ans_num=ans_num)
+                else:
+                    answers = UserAnswers.query.all()
+        if answers is None:
+            print('answer is none')
+            return -1
+        return answers
+    except Exception:
+        print('exception!')
+        db.session.rollback()
+
+
 def format_answer(UserAnswers):
     return {
         "user_id": UserAnswers.user_id,

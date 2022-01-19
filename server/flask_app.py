@@ -74,16 +74,38 @@ def get_answers():
 
 @app.route('/allAnswers', methods=['GET'])
 def get_all_answers():
-
-
     answers = db_fetch_answers()
-
-    #answers = db_fetch_poll_answers()
-    #answers = db_fetch_admins()
-    #print('answers: ' + answers)
     answers_list = []
     for answer in answers:
         print(answer)
+        answers_list.append(format_answer(answer))
+    print("this is the list of answers returned to react: ", answers_list)
+    return {'answers_list': answers_list}
+
+@app.route('/filteredAnswers', methods=['GET'])
+def get_filtered_answers():
+    data = request.get_json()
+    print("data: ", data)
+    print("user_id: ", request.args.get('user_id'))
+    print("poll_id: ", request.args.get('poll_id'))
+    print("ans_num: ", request.args.get('ans_num'))
+    #print('user_id_filter')
+    #print(request.args.get('user_id'))
+    user_id_filter = request.args.get('user_id')
+    poll_id_filter = request.args.get('poll_id')
+    answer_num_filter = request.args.get('ans_num')
+    if (user_id_filter == None or user_id_filter == ''):
+        user_id_filter = -1
+
+    if (poll_id_filter == None or poll_id_filter == ''):
+        poll_id_filter = -1
+
+    if (answer_num_filter == None or answer_num_filter == ''):
+        answer_num_filter = -1;
+
+    answers = db_fetch_filtered_answers(user_id_filter,poll_id_filter, answer_num_filter)
+    answers_list = []
+    for answer in answers:
         answers_list.append(format_answer(answer))
     print("this is the list of answers returned to react: ", answers_list)
     return {'answers_list': answers_list}
