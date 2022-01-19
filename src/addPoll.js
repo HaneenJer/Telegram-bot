@@ -22,6 +22,7 @@ function AddPoll(props) {
     const [pollDesc, setPollDesc] = useState("")
     const [inputFeilds, setInputFeilds] = useState([{description: ''}, {description: ''},])
     const [usersList, setUsersList] = useState([{username: "", chat_id: "", isChecked: false}]);
+    const [answersList, setAnswersList] = useState([{username: "", poll_id: "", answer: false}]);
 
     const user = getUser();
         const fetchUsers = async () => {
@@ -37,8 +38,58 @@ function AddPoll(props) {
         }
     };
 
+    //     const fetchAnswers = async () => {
+    //     try {
+    //         const data = await axios.get('http://localhost:5000/allAnswers');
+    //         console.log('data.data: ')
+    //         console.log(Object.values(data.data))
+    //         const answers = Object.values(data.data);
+    //         console.log('answers: ')
+    //         console.log(answers)
+    //         setAnswersList(Object.values(data.data));
+    //         console.log('answersList: ')
+    //         console.log(answersList)
+    //     } catch (err) {
+    //         console.error(err.message);
+    //     }
+    // };
+
+    //     const fetchAnswers = async () => {
+    //     try {
+    //         const data = await axios.get('http://localhost:5000/allAnswers');
+    //         console.log('data.data: ')
+    //         console.log(Object.values(data.data))
+    //         const answers = Object.values(data.data);
+    //         console.log('answers: ')
+    //         console.log(answers)
+    //         setAnswersList(Object.values(data.data));
+    //         console.log('answersList: ')
+    //         console.log(answersList)
+    //     } catch (err) {
+    //         console.error(err.message);
+    //     }
+    // };
+
     useEffect(() => {
+        const fetchAnswers= async()=> {
+           const url = 'http://localhost:5000/allAnswers'
+
+         await fetch(`http://localhost:5000/allAnswers`).then((data)=> {
+             console.log("flask data", data)
+             const res = data.json();
+             return res
+         }).then((res) => {
+             console.log("result", res['answers_list'])
+            for (const val of res['answers_list']) {
+                answersList.push(val);
+                console.log("val", val)
+            }
+         }).catch(e => {
+                console.log("error", e)
+            })
+        }
         fetchUsers();
+        fetchAnswers();
     }, []);
 
     const handleChangeInput = (index, event) => {
@@ -129,6 +180,28 @@ function AddPoll(props) {
                             <tr key={index}>
                                 <td>{user.name}</td>
                                 <td><input type="checkbox" onChange={()=>handleCheck(index)}/></td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <h2>Sort target audience</h2>
+                    <br/><br/>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>username</th>
+                            <th>poll_id</th>
+                            <th>answer</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {answersList.map((answer, index) => (
+                            <tr key={index}>
+                                <td>{answer.user_id}</td>
+                                <td>{answer.poll_id}</td>
+                                <td>{answer.ans_num}</td>
                             </tr>
                         ))}
                         </tbody>

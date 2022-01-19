@@ -180,7 +180,7 @@ def send_poll_to_user(poll_id, description, options, user_id, first_req):
         'options': optionsList,
         'is_anonymous': False,
     }
-    base_url = "https://api.telegram.org/bot5065858913:AAFMuph4soAvArtqdrwuIHqNb8CHLbz5pZE/sendPoll"
+    base_url = "https://api.telegram.org/bot5048699289:AAGd1BysZFujGqZ1BDS4R64EJ-nyQ0De9pw/sendPoll"
     resp = requests.post(url=base_url, json=req_data).json()
     if resp["ok"]:
         data = resp["result"]
@@ -202,6 +202,19 @@ def db_fetch_poll_answers(poll_id):
     #     #answers = UserAnswers.query.filter_by(UserAnswers.poll_id ==  poll_id).all()
     try:
         answers = UserAnswers.query.filter_by(poll_id=poll_id)
+        if answers is None:
+            print('answer is none')
+            return -1
+        return answers
+    except Exception:
+        db.session.rollback()
+
+def db_fetch_answers():
+    # def db_fetch_poll_answers():
+    # try:
+    #     #answers = UserAnswers.query.filter_by(UserAnswers.poll_id ==  poll_id).all()
+    try:
+        answers = UserAnswers.query.all()
         if answers is None:
             print('answer is none')
             return -1
