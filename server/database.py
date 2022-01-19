@@ -62,7 +62,6 @@ def get_last_poll_id():
         curr_poll = len(all_polls) + 1
     return curr_poll
 
-
 def db_add_usr(chat_id, username):
     try:
         user = User(chat_id=chat_id, username=username)
@@ -159,14 +158,10 @@ def db_add_poll_option(poll_id, ans_id, ans):
 
 def add_generated_id(poll_id, user_id, generated_id):
     try:
-        print("poll id: ", poll_id)
-        print("geneated id: ", generated_id)
-        print("user id: ", user_id)
         generated = GeneratedPoll(poll_id=poll_id, user_id=user_id, generated_id=generated_id)
         db.session.add(generated)
         db.session.commit()
     except Exception:
-        print("exception")
         db.session.rollback()
 
 
@@ -203,12 +198,25 @@ def db_fetch_poll_answers(poll_id):
     try:
         answers = UserAnswers.query.filter_by(poll_id=poll_id)
         if answers is None:
-            print('answer is none')
             return -1
         return answers
     except Exception:
         db.session.rollback()
 
+def db_get_poll_id(chat_id, generated_id):
+    poll = GeneratedPoll.query.filter_by(generated_id=generated_id).first()
+    if poll.user_id == chat_id:
+        poll_id = poll.poll_id
+        return poll_id
+
+
+def db_add_user_answer(chat_id, poll_id, answer):
+    try:
+        user_ans = UserAnswers(user_id=chat_id, poll_id=poll_id, ans_num=answer)
+        db.session.add(user_ans)
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
 
 def format_answer(UserAnswers):
     return {
@@ -238,7 +246,6 @@ def db_fetch_users():
 def db_delete_usr(chat_id, username):
     try:
         user_chat = User.query.filter_by(chat_id=chat_id).first()
-
         if user_chat is not None:
             if user_chat.username != username:
                 return -2
