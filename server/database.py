@@ -220,6 +220,8 @@ def db_fetch_poll_answers(poll_id):
 
 def db_get_poll_id(chat_id, generated_id):
     poll = GeneratedPoll.query.filter_by(generated_id=generated_id).first()
+    if poll is None:
+        return
     if poll.user_id == chat_id:
         poll_id = poll.poll_id
         return poll_id

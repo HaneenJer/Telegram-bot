@@ -5,7 +5,7 @@ import logging
 from config import bot, flask
 
 TOKEN = bot["token"]
-URL = flask["url"]
+URL = 'http://localhost:5000'
 
 # Enable logging
 logging.basicConfig(

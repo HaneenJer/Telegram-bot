@@ -1,11 +1,12 @@
 from flask import *
 from flask_cors import CORS
 from database import *
+from config import postgres
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:i4gw6RHK@localhost:5432/tele_polls'
-app.config['SECRET_KEY'] = 'g34jdk9018220dd'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = postgres["SQLALCHEMY_DATABASE_URI"]
+app.config['SECRET_KEY'] = postgres["SECRET_KEY"]
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = postgres["SQLALCHEMY_TRACK_MODIFICATIONS"]
 CORS(app)
 
 NOTFOUND = 404
@@ -119,6 +120,15 @@ def add_admin():
         return Response("this admin is already registered", status=CONFLICT)
     return Response("admin added", status=OK)
 
+@app.route('/answerPoll', methods=['POST'])
+def get_poll_ans():
+    chat_id = int(request.args.get("chat_id"))
+    answer = int(request.args.get("answer"))
+    generated_id = request.args.get("generated_id")
+    poll_id = db_get_poll_id(chat_id, generated_id)
+    db_add_user_answer(chat_id, poll_id, answer)
+    db_delete_generated_poll(generated_id)
+    return Response("answer added", status=OK)
 
 class admin_data:
     userId = "789789",
