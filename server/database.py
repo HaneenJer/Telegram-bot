@@ -53,6 +53,21 @@ class GeneratedPoll(db.Model):
     ForeignKeyConstraint((poll_id,), [Polls.poll_id], ondelete="CASCADE")
     ForeignKeyConstraint((user_id,), [User.chat_id], ondelete="CASCADE")
 
+def db_delete_generated_poll(generated_id):
+    try:
+        poll = GeneratedPoll.query.filter_by(generated_id=generated_id).first()
+        if poll is not None:
+            db.session.delete(poll)
+            db.session.commit()
+        else:
+            return -1
+    except Exception:
+        db.session.rollback()
+        return -1
+
+
+def create_db(app):
+    db.init_app(app)
 
 def get_last_poll_id():
     all_polls = db_fetch_all_polls()
