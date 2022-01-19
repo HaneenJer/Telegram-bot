@@ -20,9 +20,9 @@ class Admin(db.Model):
 class Polls(db.Model):
     __tablename__ = 'polls'
     poll_id = db.Column(db.Integer, primary_key=True, )
-    admin_name = db.Column(db.String())
     description = db.Column(db.String())
-    ForeignKeyConstraint((admin_name,), [Admin.name], ondelete="CASCADE")
+    author = db.Column(db.String(500))
+    ForeignKeyConstraint((author,), [Admin.name], ondelete="CASCADE")
 
 
 class PollsOptions(db.Model):
@@ -80,6 +80,7 @@ def add_first_admin():
     db_add_admin(username="admin", password="236369")
 
 
+
 def db_fetch_all_polls():
     try:
         polls = Polls.query.all()
@@ -91,9 +92,9 @@ def db_fetch_all_polls():
 
 
 def db_fetch_polls(adminName):
-    # TODO: get polls of this admin
     try:
-        polls = Polls.query.all()
+        print('admin name is: ', adminName)
+        polls = Polls.query.filter_by(author=adminName)
         if polls is None:
             return -1
         return polls
