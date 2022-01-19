@@ -38,6 +38,7 @@ function AddPoll(props) {
             console.error(err.message);
         }
     };
+    console.log("this is the users list:", usersList);
 
     useEffect(() => {
         fetchUsers();
@@ -83,9 +84,11 @@ function AddPoll(props) {
         await axios.post('http://localhost:5000/polls', poll)
     }
 
+
     const handleCheck = (index) => {
         usersList[index]["isChecked"] = !usersList[index]["isChecked"];
     }
+
 
     return (
         <Container>
@@ -124,6 +127,7 @@ function AddPoll(props) {
                     <h2>Select target audience</h2>
                     <br/><br/>
                     <table>
+                        {/*<TablePagination count={10} page={2} onPageChange={2} rowsPerPage={5}/>*/}
                         <thead>
                         <tr>
                             <th>username</th>

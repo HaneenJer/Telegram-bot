@@ -62,8 +62,7 @@ def recieve_poll_ans(update: Update, context):
     print("this is the answer: ", answer)
     rel_url = URL + '/answerPoll'
     data = {'chat_id': chat_id, 'generated_id': generated_poll_id, 'answer': answer}
-    response = requests.post(rel_url, params=data)
-    update.message.reply_text(response.text)
+    requests.post(rel_url, params=data)
 
 
 def polls_bot():
