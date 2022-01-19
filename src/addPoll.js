@@ -5,6 +5,7 @@ import axios from 'axios';
 import './addPoll.css';
 import {getUser} from "./Utils/Common";
 
+
 const useStyles = makeStyles((theme) => ({
     root: {
         '& .MuiTextField-root': {
@@ -23,6 +24,11 @@ function AddPoll(props) {
     const [inputFeilds, setInputFeilds] = useState([{description: ''}, {description: ''},])
     const [usersList, setUsersList] = useState([{username: "", chat_id: "", isChecked: false}]);
     const [answersList, setAnswersList] = useState([{username: "", poll_id: "", answer: false}]);
+    const user_id = useFormInput('');
+    const poll_id = useFormInput('');
+    const answer = useFormInput('');
+
+    var originalAnswerList = [];
 
     const user = getUser();
         const fetchUsers = async () => {
@@ -38,37 +44,6 @@ function AddPoll(props) {
         }
     };
 
-    //     const fetchAnswers = async () => {
-    //     try {
-    //         const data = await axios.get('http://localhost:5000/allAnswers');
-    //         console.log('data.data: ')
-    //         console.log(Object.values(data.data))
-    //         const answers = Object.values(data.data);
-    //         console.log('answers: ')
-    //         console.log(answers)
-    //         setAnswersList(Object.values(data.data));
-    //         console.log('answersList: ')
-    //         console.log(answersList)
-    //     } catch (err) {
-    //         console.error(err.message);
-    //     }
-    // };
-
-    //     const fetchAnswers = async () => {
-    //     try {
-    //         const data = await axios.get('http://localhost:5000/allAnswers');
-    //         console.log('data.data: ')
-    //         console.log(Object.values(data.data))
-    //         const answers = Object.values(data.data);
-    //         console.log('answers: ')
-    //         console.log(answers)
-    //         setAnswersList(Object.values(data.data));
-    //         console.log('answersList: ')
-    //         console.log(answersList)
-    //     } catch (err) {
-    //         console.error(err.message);
-    //     }
-    // };
 
     useEffect(() => {
         const fetchAnswers= async()=> {
@@ -84,6 +59,7 @@ function AddPoll(props) {
                 answersList.push(val);
                 console.log("val", val)
             }
+            answersList.shift()
          }).catch(e => {
                 console.log("error", e)
             })
@@ -97,6 +73,51 @@ function AddPoll(props) {
         values[index]["description"] = event.target.value;
         setInputFeilds(values);
     }
+
+    const handleResetTable = () => {
+        setUsersList(originalAnswerList);
+    }
+
+    const handleFilter = () => {
+        originalAnswerList = answersList;
+        for (var i = 0; i < answersList.length; i++) {
+            if((user_id.value != '' && Object.values(answersList[i])[2] != user_id.value)
+            || (poll_id.value != '' && Object.values(answersList[i])[1] != poll_id.value)
+            || (answer.value != '' && Object.values(answersList[i])[0] != answer.value)) {
+                answersList.splice(i, 1);
+                i = i-1;
+            }
+        }
+        setUsersList(answersList);
+    }
+
+    const handlePollIdFilter = () => {
+        for (var i = 0; i < answersList.length; i++) {
+            if(Object.values(answersList[i])[1] != poll_id.value) {
+                answersList.splice(i, 1);
+                i = i-1;
+            }
+        }
+        setUsersList(answersList);
+    }
+
+    const handleAnswerFilter = () => {
+        console.log('answersList');
+        console.log(answersList);
+        for (var i = 0; i < answersList.length; i++) {
+            if(Object.values(answersList[i])[0] != answer.value) {
+                answersList.splice(i, 1);
+                i = i-1;
+            }
+        }
+        setUsersList(answersList);
+        console.log('filtered answersList');
+        console.log(answersList);
+        setUsersList(answersList);
+    }
+
+
+
     const handleAddOption = () => {
         setInputFeilds([...inputFeilds, {description: ''}]);
     }
@@ -158,7 +179,6 @@ function AddPoll(props) {
                             <br/>
                             <Button className={classes.button} variant="contained" color={"primary"} type="submit"
                                 // endIcon={<Send/>}
-
                                     onClick={handleSubmit}>
                                 Add Poll
                             </Button>
@@ -186,12 +206,21 @@ function AddPoll(props) {
                     </table>
                 </div>
                 <div>
-                    <h2>Sort target audience</h2>
+                    <h2>Filter target audience</h2>
+                    <input type="text" {...user_id} placeholder="user id" />
+                    <input type="text" {...poll_id} placeholder="poll id" />
+                    <input type="text" {...answer} placeholder="answer" />
+                    <br/><br/>
+                    <Button className={classes.button} variant="contained" color={"primary"} type="submit"
+                                // endIcon={<Send/>}
+                                    onClick={handleFilter}>
+                                filter!
+                    </Button>
                     <br/><br/>
                     <table>
                         <thead>
                         <tr>
-                            <th>username</th>
+                            <th>user_id</th>
                             <th>poll_id</th>
                             <th>answer</th>
                         </tr>
@@ -211,5 +240,17 @@ function AddPoll(props) {
         </Container>
     )
 }
+
+    const useFormInput = initialValue => {
+          const [value, setValue] = useState(initialValue);
+
+          const handleChange = e => {
+            setValue(e.target.value);
+          }
+          return {
+            value,
+            onChange: handleChange
+          }
+    }
 
 export default AddPoll;
