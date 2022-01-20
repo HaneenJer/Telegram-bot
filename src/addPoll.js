@@ -31,7 +31,7 @@ function AddPoll(props) {
     const poll_id = useFormInput('');
     const answer = useFormInput('');
 
-    var originalAnswerList = [];
+    // var originalAnswerList = [];
 
     const user = getUser();
     const fetchUsers = async () => {
@@ -42,8 +42,6 @@ function AddPoll(props) {
                 users[i]["isChecked"] = false;
             }
             setUsersList(users);
-            console.log('users');
-            console.log(users)
         } catch (err) {
             console.error(err.message);
         }
@@ -54,42 +52,25 @@ function AddPoll(props) {
             var user_id_filter = user_id;
             var poll_id_filter = poll_id;
             var answer_filter = answer;
-            console.log('params')
-            console.log(user_id_filter.value)
-            console.log(poll_id_filter.value)
-            console.log(answer_filter.value)
             const data = await axios.get('http://localhost:5000/filteredAnswers', { params: { user_id: user_id_filter.value,
                     poll_id: poll_id_filter.value, ans_num: answer_filter.value } });
-            const {answers} = data.data
-            const {answersList} = data.data.answers_list
             setAnswersList(data.data.answers_list);
-            console.log('data.data.answers_list: ');
-            console.log(data.data.answers_list)
-            console.log('answers: ');
-            console.log(answers)
-            console.log('answersList: ');
-            console.log(answersList)
         } catch (err) {
             console.error(err.message);
         }
     };
-    console.log("this is the users list:", usersList);
 
 
     useEffect(() => {
         const fetchAnswers= async()=> {
-           const url = 'http://localhost:5000/allAnswers'
 
          await fetch(`http://localhost:5000/allAnswers`).then((data)=> {
-             console.log("flask data", data)
              const res = data.json();
              return res
          }).then((res) => {
-             console.log("result", res['answers_list'])
             for (const val of res['answers_list']) {
                 answersList.push(val);
                 updatedAnswersList.push(val);
-                console.log("val", val)
             }
             answersList.shift();
             updatedAnswersList.shift();
@@ -111,51 +92,23 @@ function AddPoll(props) {
         setInputFeilds(values);
     }
 
-    const handleResetTable = () => {
-        setUsersList(originalAnswerList);
-    }
-
 
 
     const handleFilter = () => {
-        originalAnswerList = answersList;
+        // originalAnswerList = answersList;
         for (var i = 0; i < updatedAnswersList.length; i++) {
-            if((user_id.value != '' && Object.values(updatedAnswersList[i])[2] != user_id.value)
-            || (poll_id.value != '' && Object.values(updatedAnswersList[i])[1] != poll_id.value)
-            || (answer.value != '' && Object.values(updatedAnswersList[i])[0] != answer.value)) {
+            if((user_id.value !== '' && Object.values(updatedAnswersList[i])[2] !== user_id.value)
+            || (poll_id.value !== '' && Object.values(updatedAnswersList[i])[1] !== poll_id.value)
+            || (answer.value !== '' && Object.values(updatedAnswersList[i])[0] !== answer.value)) {
                 updatedAnswersList.splice(i, 1);
                 i = i-1;
             }
         }
           setUpdatedAnswersList(updatedAnswersList);
-        console.log(updatedAnswersList);
         get_filtered_answers();
     }
 
-    const handlePollIdFilter = () => {
-        for (var i = 0; i < answersList.length; i++) {
-            if(Object.values(answersList[i])[1] != poll_id.value) {
-                answersList.splice(i, 1);
-                i = i-1;
-            }
-        }
-        setUsersList(answersList);
-    }
 
-    const handleAnswerFilter = () => {
-        console.log('answersList');
-        console.log(answersList);
-        for (var i = 0; i < answersList.length; i++) {
-            if(Object.values(answersList[i])[0] != answer.value) {
-                answersList.splice(i, 1);
-                i = i-1;
-            }
-        }
-        setUsersList(answersList);
-        console.log('filtered answersList');
-        console.log(answersList);
-        setUsersList(answersList);
-    }
 
 
 
@@ -179,10 +132,8 @@ function AddPoll(props) {
 
 function checkAll() {
     var c = document.getElementById('users').getElementsByTagName('input');
-    console.log(c)
     for (var i = 0; i < c.length; i++) {
-        console.log(c[i].type)
-        if (c[i].type == 'checkbox') {
+        if (c[i].type === 'checkbox') {
             c[i].checked = true;
             handleCheck(i);
         }
@@ -192,7 +143,7 @@ function checkAll() {
 function resetChecked() {
     var c = document.getElementById('users').getElementsByTagName('input');
     for (var i = 0; i < c.length; i++) {
-        if (c[i].type == 'checkbox') {
+        if (c[i].type === 'checkbox') {
             c[i].checked = false;
             usersList[i]["isChecked"] = false;
         }
@@ -202,11 +153,6 @@ function resetChecked() {
 function checkSorted() {
     resetChecked();
     var c = document.getElementById('users').getElementsByTagName('input');
-    console.log(c)
-    console.log('answersList')
-    console.log(answersList)
-    console.log('usersList')
-    console.log(usersList)
     for (var i = 0; i < c.length; i++) {
         for (var j = 0; j < answersList.length; j++) {
             if(answersList[j].user_id === usersList[i].chat_id){

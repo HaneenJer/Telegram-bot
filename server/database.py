@@ -54,6 +54,7 @@ class GeneratedPoll(db.Model):
     ForeignKeyConstraint((poll_id,), [Polls.poll_id], ondelete="CASCADE")
     ForeignKeyConstraint((user_id,), [User.chat_id], ondelete="CASCADE")
 
+
 def db_delete_generated_poll(generated_id):
     try:
         poll = GeneratedPoll.query.filter_by(generated_id=generated_id).first()
@@ -70,6 +71,7 @@ def db_delete_generated_poll(generated_id):
 def create_db(app):
     db.init_app(app)
 
+
 def get_last_poll_id():
     all_polls = db_fetch_all_polls()
     if all_polls == -1:
@@ -77,6 +79,7 @@ def get_last_poll_id():
     else:
         curr_poll = len(all_polls) + 1
     return curr_poll
+
 
 def db_add_usr(chat_id, username):
     try:
@@ -94,7 +97,6 @@ def db_add_usr(chat_id, username):
 
 def add_first_admin():
     db_add_admin(username="admin", password="236369")
-
 
 
 def db_fetch_all_polls():
@@ -210,17 +212,29 @@ def db_send_poll(poll_id, description, options, usersList):
             first_req = False
 
 
+# def db_fetch_poll_answers(poll_id):
+#     # def db_fetch_poll_answers():
+#     # try:
+#     #     #answers = UserAnswers.query.filter_by(UserAnswers.poll_id ==  poll_id).all()
+#     try:
+#         answers = UserAnswers.query.filter_by(poll_id=poll_id)
+#         if answers is None:
+#             return -1
+#         return answers
+#     except Exception:
+#         db.session.rollback()
+
 def db_fetch_poll_answers(poll_id):
-    # def db_fetch_poll_answers():
-    # try:
-    #     #answers = UserAnswers.query.filter_by(UserAnswers.poll_id ==  poll_id).all()
     try:
         answers = UserAnswers.query.filter_by(poll_id=poll_id)
+        poll_options = PollsOptions.query.filter_by(poll_id=poll_id).all()
+        print("this is poll options: ", poll_options)
         if answers is None:
             return -1
         return answers
     except Exception:
         db.session.rollback()
+
 
 def db_fetch_answers():
     # def db_fetch_poll_answers():
@@ -236,7 +250,13 @@ def db_fetch_answers():
         db.session.rollback()
 
 
-def db_fetch_filtered_answers(user_id = -1, poll_id = -1, ans_num = -1):
+def db_get_poll_desc(poll_id):
+    poll = Polls.query.filter_by(poll_id=poll_id).first()
+    if poll is not None:
+        return poll.description
+
+
+def db_fetch_filtered_answers(user_id=-1, poll_id=-1, ans_num=-1):
     # def db_fetch_poll_answers():
     # try:
     #     #answers = UserAnswers.query.filter_by(UserAnswers.poll_id ==  poll_id).all()
@@ -245,10 +265,10 @@ def db_fetch_filtered_answers(user_id = -1, poll_id = -1, ans_num = -1):
         print("user_id: ", user_id)
         print("poll_id: ", poll_id)
         print("ans_num: ", ans_num)
-        if(user_id != -1):
+        if (user_id != -1):
             if (poll_id != -1):
                 if (ans_num != -1):
-                    answers = UserAnswers.query.filter_by(user_id=user_id,poll_id=poll_id,ans_num=ans_num)
+                    answers = UserAnswers.query.filter_by(user_id=user_id, poll_id=poll_id, ans_num=ans_num)
                 else:
                     answers = UserAnswers.query.filter_by(user_id=user_id, poll_id=poll_id)
             else:

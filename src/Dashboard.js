@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect, useState} from "react";
-import {getUser, removeUserSession, setUserSession,setPoll} from './Utils/Common';
+import {getUser, removeUserSession,setPoll} from './Utils/Common';
 import axios from 'axios';
 
 import './Dashboard.css';
@@ -29,7 +29,6 @@ function Dashboard(props) {
     const fetchPolls = async () => {
         try {
             console.log(user.name)
-            const admin = {username, password};
             console.log('admin')
             const data = await axios.get('http://localhost:5000/polls', { params: { username: user.username } });
             const {polls} = data.data
@@ -80,10 +79,10 @@ function Dashboard(props) {
                 <br/><br/>
             </div>
             {" "}
-            <div class="grid-container">
+            <div className="grid-container">
             <div align="center">
                 <h3> Existing admins table:</h3>
-                <table className>
+                <table>
                     <thead>
                     <tr>
                         <th>username</th>
@@ -112,7 +111,7 @@ function Dashboard(props) {
                 <input type="button" value={'Add new admin!'} onClick={handleAddAdmin}/><br/>
             </div>
             <div  align="center">
-                <div class='my_poll'>
+                <div className='my_poll'>
                     <h3> My Polls:</h3>
                 </div>
                 <table>
