@@ -1,6 +1,7 @@
 import requests
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKeyConstraint
+from config import bot
 
 db = SQLAlchemy()
 
@@ -21,7 +22,7 @@ class Polls(db.Model):
     __tablename__ = 'polls'
     poll_id = db.Column(db.Integer, primary_key=True, )
     description = db.Column(db.String())
-    author = db.Column(db.String(500))
+    author = db.Column(db.String())
     ForeignKeyConstraint((author,), [Admin.name], ondelete="CASCADE")
 
 
@@ -53,6 +54,21 @@ class GeneratedPoll(db.Model):
     ForeignKeyConstraint((poll_id,), [Polls.poll_id], ondelete="CASCADE")
     ForeignKeyConstraint((user_id,), [User.chat_id], ondelete="CASCADE")
 
+def db_delete_generated_poll(generated_id):
+    try:
+        poll = GeneratedPoll.query.filter_by(generated_id=generated_id).first()
+        if poll is not None:
+            db.session.delete(poll)
+            db.session.commit()
+        else:
+            return -1
+    except Exception:
+        db.session.rollback()
+        return -1
+
+
+def create_db(app):
+    db.init_app(app)
 
 def get_last_poll_id():
     all_polls = db_fetch_all_polls()
@@ -61,7 +77,6 @@ def get_last_poll_id():
     else:
         curr_poll = len(all_polls) + 1
     return curr_poll
-
 
 def db_add_usr(chat_id, username):
     try:
@@ -141,7 +156,7 @@ def format_user(User):
 
 def db_add_poll(poll_id, admin, description):
     try:
-        poll = Polls(poll_id=poll_id, admin_name=admin.lower(), description=description)
+        poll = Polls(poll_id=poll_id, author=admin.lower(), description=description)
         db.session.add(poll)
         db.session.commit()
     except Exception:
@@ -159,14 +174,10 @@ def db_add_poll_option(poll_id, ans_id, ans):
 
 def add_generated_id(poll_id, user_id, generated_id):
     try:
-        print("poll id: ", poll_id)
-        print("geneated id: ", generated_id)
-        print("user id: ", user_id)
         generated = GeneratedPoll(poll_id=poll_id, user_id=user_id, generated_id=generated_id)
         db.session.add(generated)
         db.session.commit()
     except Exception:
-        print("exception")
         db.session.rollback()
 
 
@@ -180,7 +191,10 @@ def send_poll_to_user(poll_id, description, options, user_id, first_req):
         'options': optionsList,
         'is_anonymous': False,
     }
-    base_url = "https://api.telegram.org/bot5048699289:AAGd1BysZFujGqZ1BDS4R64EJ-nyQ0De9pw/sendPoll"
+
+    bot_token = bot['token']
+    base_url = f"https://api.telegram.org/bot{bot_token}/sendPoll"
+
     resp = requests.post(url=base_url, json=req_data).json()
     if resp["ok"]:
         data = resp["result"]
@@ -203,7 +217,6 @@ def db_fetch_poll_answers(poll_id):
     try:
         answers = UserAnswers.query.filter_by(poll_id=poll_id)
         if answers is None:
-            print('answer is none')
             return -1
         return answers
     except Exception:
@@ -263,6 +276,24 @@ def db_fetch_filtered_answers(user_id = -1, poll_id = -1, ans_num = -1):
         db.session.rollback()
 
 
+def db_get_poll_id(chat_id, generated_id):
+    poll = GeneratedPoll.query.filter_by(generated_id=generated_id).first()
+    if poll is None:
+        return
+    if poll.user_id == chat_id:
+        poll_id = poll.poll_id
+        return poll_id
+
+
+def db_add_user_answer(chat_id, poll_id, answer):
+    try:
+        user_ans = UserAnswers(user_id=chat_id, poll_id=poll_id, ans_num=answer)
+        db.session.add(user_ans)
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+
+
 def format_answer(UserAnswers):
     return {
         "user_id": UserAnswers.user_id,
@@ -291,7 +322,6 @@ def db_fetch_users():
 def db_delete_usr(chat_id, username):
     try:
         user_chat = User.query.filter_by(chat_id=chat_id).first()
-
         if user_chat is not None:
             if user_chat.username != username:
                 return -2

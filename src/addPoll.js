@@ -1,6 +1,8 @@
-import React, {Fragment, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Container, TextField, makeStyles, IconButton, Button} from "@material-ui/core";
 import axios from 'axios';
+import {FcAddRow, FcDeleteRow} from "react-icons/fc";
+import {BiSend} from "react-icons/bi";
 
 import './addPoll.css';
 import {getUser} from "./Utils/Common";
@@ -32,7 +34,7 @@ function AddPoll(props) {
     var originalAnswerList = [];
 
     const user = getUser();
-        const fetchUsers = async () => {
+    const fetchUsers = async () => {
         try {
             const data = await axios.get('http://localhost:5000/users');
             const {users} = data.data;
@@ -71,6 +73,7 @@ function AddPoll(props) {
             console.error(err.message);
         }
     };
+    console.log("this is the users list:", usersList);
 
 
     useEffect(() => {
@@ -99,6 +102,10 @@ function AddPoll(props) {
     }, []);
 
     const handleChangeInput = (index, event) => {
+        if (pollDesc === '') {
+            alert("Please fill the poll description, before adding options");
+            return;
+        }
         const values = [...inputFeilds];
         values[index]["description"] = event.target.value;
         setInputFeilds(values);
@@ -159,6 +166,10 @@ function AddPoll(props) {
     const handleRemoveOption = () => {
         const values = [...inputFeilds];
         const len = values.length;
+        if (len === 2) {
+            alert("You should at least have two options ");
+            return;
+        }
         if (len > 2) {
             values.splice(len - 1, 1);
             setInputFeilds(values);
@@ -209,8 +220,6 @@ function checkSorted() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("input fields: ", inputFeilds);
-        console.log("description: ", pollDesc);
         const values = [...inputFeilds];
         for (let i = 0; i < values.length; i++) {
             if (values[i]["description"] === '') {
@@ -223,11 +232,12 @@ function checkSorted() {
         await axios.post('http://localhost:5000/polls', poll)
     }
 
-    const handleCheck = (index) =>{
-    usersList[index]["isChecked"] = true;
+
+    const handleCheck = (index) => {
+        usersList[index]["isChecked"] = !usersList[index]["isChecked"];
     }
 
-     {/*TODO: check how to add icons */}
+
     return (
 
         <Container>
@@ -249,14 +259,14 @@ function checkSorted() {
                                 </div>
                             ))}
                             <IconButton onClick={handleAddOption}>
-                                {/*<AddCircle/>*/}
+                                <FcAddRow/>
                             </IconButton>
                             <IconButton onClick={handleRemoveOption}>
-                                {/*<RemoveCircle/>*/}
+                                <FcDeleteRow/>
                             </IconButton>
                             <br/>
                             <Button className={classes.button} variant="contained" color={"primary"} type="submit"
-                                // endIcon={<Send/>}
+                                    endIcon={<BiSend/>}
                                     onClick={handleSubmit}>
                                 Add Poll
                             </Button>
@@ -267,6 +277,7 @@ function checkSorted() {
                     <h2>Select target audience</h2>
                     <br/><br/>
                     <table>
+                        {/*<TablePagination count={10} page={2} onPageChange={2} rowsPerPage={5}/>*/}
                         <thead>
                         <tr>
                             <th>user_id</th>
@@ -279,7 +290,7 @@ function checkSorted() {
                             <tr key={index}>
                                 <td>{user.chat_id}</td>
                                 <td>{user.name}</td>
-                                <td><input type="checkbox" onChange={()=>handleCheck(index)}/></td>
+                                <td><input type="checkbox" onChange={() => handleCheck(index)}/></td>
                             </tr>
                         ))}
                         </tbody>
