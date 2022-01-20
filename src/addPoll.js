@@ -40,6 +40,8 @@ function AddPoll(props) {
                 users[i]["isChecked"] = false;
             }
             setUsersList(users);
+            console.log('users');
+            console.log(users)
         } catch (err) {
             console.error(err.message);
         }
@@ -106,6 +108,8 @@ function AddPoll(props) {
         setUsersList(originalAnswerList);
     }
 
+
+
     const handleFilter = () => {
         originalAnswerList = answersList;
         for (var i = 0; i < updatedAnswersList.length; i++) {
@@ -161,6 +165,20 @@ function AddPoll(props) {
         }
     }
 
+
+function checkAll() {
+    var c = document.getElementById('users').getElementsByTagName('input');
+    console.log(c)
+    for (var i = 0; i < c.length; i++) {
+        console.log(c[i].type)
+        if (c[i].type == 'checkbox') {
+            c[i].checked = true;
+            handleCheck(i);
+        }
+    }
+}
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log("input fields: ", inputFeilds);
@@ -183,7 +201,9 @@ function AddPoll(props) {
 
      {/*TODO: check how to add icons */}
     return (
+
         <Container>
+
             <div className="grid-container">
                 <div>
                     <h2 >Add Poll </h2>
@@ -215,12 +235,13 @@ function AddPoll(props) {
                         </div>
                     </form>
                 </div>
-                <div>
+                <div id='users'>
                     <h2>Select target audience</h2>
                     <br/><br/>
                     <table>
                         <thead>
                         <tr>
+                            <th>user_id</th>
                             <th>username</th>
                             <th>select</th>
                         </tr>
@@ -228,12 +249,19 @@ function AddPoll(props) {
                         <tbody>
                         {usersList.map((user, index) => (
                             <tr key={index}>
+                                <td>{user.chat_id}</td>
                                 <td>{user.name}</td>
                                 <td><input type="checkbox" onChange={()=>handleCheck(index)}/></td>
                             </tr>
                         ))}
                         </tbody>
                     </table>
+                    <Button id='myButton' className={classes.button} variant="contained" color={"primary"} type="submit"
+                                // endIcon={<Send/>}
+                                    onClick={checkAll}>
+                                check all
+                    </Button>
+
                 </div>
                 <div>
                     <h2>Filter target audience</h2>
@@ -266,6 +294,7 @@ function AddPoll(props) {
                         </tbody>
                     </table>
                 </div>
+
             </div>
         </Container>
     )

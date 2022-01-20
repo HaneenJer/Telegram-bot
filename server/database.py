@@ -239,7 +239,10 @@ def db_fetch_filtered_answers(user_id = -1, poll_id = -1, ans_num = -1):
                 else:
                     answers = UserAnswers.query.filter_by(user_id=user_id, poll_id=poll_id)
             else:
-                answers = UserAnswers.query.filter_by(user_id=user_id)
+                if (ans_num != -1):
+                    answers = UserAnswers.query.filter_by(user_id=user_id, ans_num=ans_num)
+                else:
+                    answers = UserAnswers.query.filter_by(user_id=user_id)
         else:
             if (poll_id != -1):
                 if (ans_num != -1):
