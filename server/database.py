@@ -21,7 +21,7 @@ class Polls(db.Model):
     __tablename__ = 'polls'
     poll_id = db.Column(db.Integer, primary_key=True, )
     description = db.Column(db.String())
-    author = db.Column(db.String(500))
+    author = db.Column(db.String())
     ForeignKeyConstraint((author,), [Admin.name], ondelete="CASCADE")
 
 
@@ -155,7 +155,7 @@ def format_user(User):
 
 def db_add_poll(poll_id, admin, description):
     try:
-        poll = Polls(poll_id=poll_id, admin_name=admin.lower(), description=description)
+        poll = Polls(poll_id=poll_id, author=admin.lower(), description=description)
         db.session.add(poll)
         db.session.commit()
     except Exception:
