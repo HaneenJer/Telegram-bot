@@ -1,5 +1,5 @@
 postgres = {
-    "SQLALCHEMY_DATABASE_URI": "postgresql://postgres:i4gw6RHK@localhost:5432/tele_polls",
+    "SQLALCHEMY_DATABASE_URI": "postgresql://postgres:password@localhost:5432/tele_polls",
     "SECRET_KEY": "g34jdk9018220dd",
     "SQLALCHEMY_TRACK_MODIFICATIONS": False,
 }
@@ -12,7 +12,7 @@ flask = {
             'url': "http://localhost:5000"
         },
 bot = {
-    "token" :'5048699289:AAGd1BysZFujGqZ1BDS4R64EJ-nyQ0De9pw'
+    "token" :'5065858913:AAFMuph4soAvArtqdrwuIHqNb8CHLbz5pZE'
 }
 react_sever = {
     "port": 4000,
