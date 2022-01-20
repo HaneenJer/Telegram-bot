@@ -1,6 +1,7 @@
 import requests
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKeyConstraint
+from config import bot
 
 db = SQLAlchemy()
 
@@ -190,7 +191,8 @@ def send_poll_to_user(poll_id, description, options, user_id, first_req):
         'options': optionsList,
         'is_anonymous': False,
     }
-    base_url = "https://api.telegram.org/bot5065858913:AAFMuph4soAvArtqdrwuIHqNb8CHLbz5pZE/sendPoll"
+    bot_token = bot['token']
+    base_url = f"https://api.telegram.org/bot{bot_token}/sendPoll"
     resp = requests.post(url=base_url, json=req_data).json()
     if resp["ok"]:
         data = resp["result"]
