@@ -178,6 +178,34 @@ function checkAll() {
     }
 }
 
+function resetChecked() {
+    var c = document.getElementById('users').getElementsByTagName('input');
+    for (var i = 0; i < c.length; i++) {
+        if (c[i].type == 'checkbox') {
+            c[i].checked = false;
+            usersList[i]["isChecked"] = false;
+        }
+    }
+}
+
+function checkSorted() {
+    resetChecked();
+    var c = document.getElementById('users').getElementsByTagName('input');
+    console.log(c)
+    console.log('answersList')
+    console.log(answersList)
+    console.log('usersList')
+    console.log(usersList)
+    for (var i = 0; i < c.length; i++) {
+        for (var j = 0; j < answersList.length; j++) {
+            if(answersList[j].user_id === usersList[i].chat_id){
+                c[i].checked = true;
+                handleCheck(i);
+            }
+        }
+    }
+}
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -260,6 +288,11 @@ function checkAll() {
                                 // endIcon={<Send/>}
                                     onClick={checkAll}>
                                 check all
+                    </Button>
+                    <Button id='myButton' className={classes.button} variant="contained" color={"primary"} type="submit"
+                                // endIcon={<Send/>}
+                                    onClick={checkSorted}>
+                                check sorted
                     </Button>
 
                 </div>
