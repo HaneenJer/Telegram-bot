@@ -24,6 +24,10 @@ tr:nth-child(even) {
 
 }
 
+.pollIdClass{
+     background: rgba(255,255,255,0.8);
+
+}
 .my_poll {
     background: rgba(255,255,255,0.8);
 }

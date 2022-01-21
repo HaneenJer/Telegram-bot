@@ -3,6 +3,9 @@ import {Container, TextField, makeStyles, IconButton, Button} from "@material-ui
 import axios from 'axios';
 import {FcAddRow, FcDeleteRow} from "react-icons/fc";
 import {BiSend} from "react-icons/bi";
+import {IoIosRefreshCircle} from "react-icons/io";
+import {RiSortAsc} from "react-icons/ri";
+import {FiFilter} from "react-icons/fi";
 
 import './addPoll.css';
 import {getUser} from "./Utils/Common";
@@ -26,10 +29,11 @@ function AddPoll(props) {
     const [inputFeilds, setInputFeilds] = useState([{description: ''}, {description: ''},])
     const [usersList, setUsersList] = useState([{username: "", chat_id: "", isChecked: false}]);
     const [answersList, setAnswersList] = useState([{username: "", poll_id: "", answer: 0}]);
-    const [updatedAnswersList, setUpdatedAnswersList] = useState([{username: "", poll_id: "",answer: 0}]);
+    const [updatedAnswersList, setUpdatedAnswersList] = useState([{username: "", poll_id: "", answer: 0}]);
     const user_id = useFormInput('');
     const poll_id = useFormInput('');
     const answer = useFormInput('');
+    let [original_list,setOriginal] = useState([]);
 
     // var originalAnswerList = [];
 
@@ -52,8 +56,12 @@ function AddPoll(props) {
             var user_id_filter = user_id;
             var poll_id_filter = poll_id;
             var answer_filter = answer;
-            const data = await axios.get('http://localhost:5000/filteredAnswers', { params: { user_id: user_id_filter.value,
-                    poll_id: poll_id_filter.value, ans_num: answer_filter.value } });
+            const data = await axios.get('http://localhost:5000/filteredAnswers', {
+                params: {
+                    user_id: user_id_filter.value,
+                    poll_id: poll_id_filter.value, ans_num: answer_filter.value
+                }
+            });
             setAnswersList(data.data.answers_list);
         } catch (err) {
             console.error(err.message);
@@ -62,19 +70,20 @@ function AddPoll(props) {
 
 
     useEffect(() => {
-        const fetchAnswers= async()=> {
+        const fetchAnswers = async () => {
 
-         await fetch(`http://localhost:5000/allAnswers`).then((data)=> {
-             const res = data.json();
-             return res
-         }).then((res) => {
-            for (const val of res['answers_list']) {
-                answersList.push(val);
-                updatedAnswersList.push(val);
-            }
-            answersList.shift();
-            updatedAnswersList.shift();
-         }).catch(e => {
+            await fetch(`http://localhost:5000/allAnswers`).then((data) => {
+                const res = data.json();
+                return res
+            }).then((res) => {
+                for (const val of res['answers_list']) {
+                    answersList.push(val);
+                    updatedAnswersList.push(val);
+                    original_list.push(val)
+                }
+                answersList.shift();
+                updatedAnswersList.shift();
+            }).catch(e => {
                 console.log("error", e)
             })
         }
@@ -93,24 +102,19 @@ function AddPoll(props) {
     }
 
 
-
     const handleFilter = () => {
         // originalAnswerList = answersList;
         for (var i = 0; i < updatedAnswersList.length; i++) {
-            if((user_id.value !== '' && Object.values(updatedAnswersList[i])[2] !== user_id.value)
-            || (poll_id.value !== '' && Object.values(updatedAnswersList[i])[1] !== poll_id.value)
-            || (answer.value !== '' && Object.values(updatedAnswersList[i])[0] !== answer.value)) {
+            if ((user_id.value !== '' && Object.values(updatedAnswersList[i])[2] !== user_id.value)
+                || (poll_id.value !== '' && Object.values(updatedAnswersList[i])[1] !== poll_id.value)
+                || (answer.value !== '' && Object.values(updatedAnswersList[i])[0] !== answer.value)) {
                 updatedAnswersList.splice(i, 1);
-                i = i-1;
+                i = i - 1;
             }
         }
-          setUpdatedAnswersList(updatedAnswersList);
+        setUpdatedAnswersList(updatedAnswersList);
         get_filtered_answers();
     }
-
-
-
-
 
     const handleAddOption = () => {
         setInputFeilds([...inputFeilds, {description: ''}]);
@@ -130,38 +134,38 @@ function AddPoll(props) {
     }
 
 
-function checkAll() {
-    var c = document.getElementById('users').getElementsByTagName('input');
-    for (var i = 0; i < c.length; i++) {
-        if (c[i].type === 'checkbox') {
-            c[i].checked = true;
-            handleCheck(i);
-        }
-    }
-}
-
-function resetChecked() {
-    var c = document.getElementById('users').getElementsByTagName('input');
-    for (var i = 0; i < c.length; i++) {
-        if (c[i].type === 'checkbox') {
-            c[i].checked = false;
-            usersList[i]["isChecked"] = false;
-        }
-    }
-}
-
-function checkSorted() {
-    resetChecked();
-    var c = document.getElementById('users').getElementsByTagName('input');
-    for (var i = 0; i < c.length; i++) {
-        for (var j = 0; j < answersList.length; j++) {
-            if(answersList[j].user_id === usersList[i].chat_id){
+    function checkAll() {
+        var c = document.getElementById('users').getElementsByTagName('input');
+        for (var i = 0; i < c.length; i++) {
+            if (c[i].type === 'checkbox') {
                 c[i].checked = true;
                 handleCheck(i);
             }
         }
     }
-}
+
+    function resetChecked() {
+        var c = document.getElementById('users').getElementsByTagName('input');
+        for (var i = 0; i < c.length; i++) {
+            if (c[i].type === 'checkbox') {
+                c[i].checked = false;
+                usersList[i]["isChecked"] = false;
+            }
+        }
+    }
+
+    function checkSorted() {
+        resetChecked();
+        var c = document.getElementById('users').getElementsByTagName('input');
+        for (var i = 0; i < c.length; i++) {
+            for (var j = 0; j < answersList.length; j++) {
+                if (answersList[j].user_id === usersList[i].chat_id) {
+                    c[i].checked = true;
+                    handleCheck(i);
+                }
+            }
+        }
+    }
 
 
     const handleSubmit = async (e) => {
@@ -190,7 +194,7 @@ function checkSorted() {
 
             <div className="grid-container">
                 <div>
-                    <h2 >Add Poll </h2>
+                    <h2>Add Poll </h2>
                     <br/><br/>
                     <form className={classes.root}>
                         <div>
@@ -242,27 +246,24 @@ function checkSorted() {
                         </tbody>
                     </table>
                     <Button id='myButton' className={classes.button} variant="contained" color={"primary"} type="submit"
-                                // endIcon={<Send/>}
-                                    onClick={checkAll}>
-                                check all
+                            onClick={checkAll} endIcon={<IoIosRefreshCircle/>}>
+                        check all
                     </Button>
                     <Button id='myButton' className={classes.button} variant="contained" color={"primary"} type="submit"
-                                // endIcon={<Send/>}
-                                    onClick={checkSorted}>
-                                check sorted
+                            onClick={checkSorted} endIcon={<RiSortAsc/>}>
+                        check sorted
                     </Button>
 
                 </div>
                 <div>
                     <h2>Filter target audience</h2>
-                    <input type="text" {...user_id} placeholder="user id" />
-                    <input type="text" {...poll_id} placeholder="poll id" />
-                    <input type="text" {...answer} placeholder="answer" />
+                    <input type="text" {...user_id} placeholder="user id"/>
+                    <input type="text" {...poll_id} placeholder="poll id"/>
+                    <input type="text" {...answer} placeholder="answer"/>
                     <br/><br/>
                     <Button className={classes.button} variant="contained" color={"primary"} type="submit"
-                                // endIcon={<Send/>}
-                                    onClick={handleFilter}>
-                                filter!
+                            onClick={handleFilter} endIcon={<FiFilter/>}>
+                        filter!
                     </Button>
                     <br/><br/>
                     <table>
@@ -290,16 +291,16 @@ function checkSorted() {
     )
 }
 
-    const useFormInput = initialValue => {
-          const [value, setValue] = useState(initialValue);
+const useFormInput = initialValue => {
+    const [value, setValue] = useState(initialValue);
 
-          const handleChange = e => {
-            setValue(e.target.value);
-          }
-          return {
-            value,
-            onChange: handleChange
-          }
+    const handleChange = e => {
+        setValue(e.target.value);
     }
+    return {
+        value,
+        onChange: handleChange
+    }
+}
 
 export default AddPoll;
