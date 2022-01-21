@@ -55,13 +55,17 @@ const options = {
 };
 
 const MyPoll = (props) => {
-    const pollId = getPollId();
+    let pollId = null;
+
 
     const getPollDesc = async () => {
+        pollId = getPollId();
         if (pollId == null) {
             return;
         }
+        console.log("this is the poll id", pollId)
         const data = await axios.get('http://localhost:5000/pollDesc', { params: { poll_id: pollId } });
+        console.log("this is the poll description: ", data.data)
         options['plugins']['title']['text'] = data.data;
     }
 
@@ -93,7 +97,7 @@ const MyPoll = (props) => {
                 return res
             }).then((res) => {
                 for (const val of res['answers_list']) {
-                    dataSet1.push(val.ans_num);
+                    dataSet1.push(val.ans_desc);
                 }
                 var dataSet1Unique = [...new Set(dataSet1)];
                 const map = dataSet1.reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map());
@@ -116,7 +120,7 @@ const MyPoll = (props) => {
         getPollDesc();
         fetchAnswers();
         //fetchData();
-
+        console.log("this is data:", data)
     }, [])
 
     return (

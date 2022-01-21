@@ -212,23 +212,21 @@ def db_send_poll(poll_id, description, options, usersList):
             first_req = False
 
 
-# def db_fetch_poll_answers(poll_id):
-#     # def db_fetch_poll_answers():
-#     # try:
-#     #     #answers = UserAnswers.query.filter_by(UserAnswers.poll_id ==  poll_id).all()
-#     try:
-#         answers = UserAnswers.query.filter_by(poll_id=poll_id)
-#         if answers is None:
-#             return -1
-#         return answers
-#     except Exception:
-#         db.session.rollback()
-
 def db_fetch_poll_answers(poll_id):
+    # def db_fetch_poll_answers():
+    # try:
+    #     #answers = UserAnswers.query.filter_by(UserAnswers.poll_id ==  poll_id).all()
     try:
         answers = UserAnswers.query.filter_by(poll_id=poll_id)
-        poll_options = PollsOptions.query.filter_by(poll_id=poll_id).all()
-        print("this is poll options: ", poll_options)
+        if answers is None:
+            return -1
+        return answers
+    except Exception:
+        db.session.rollback()
+
+def db_fetch_poll_answers_desc(pollId):
+    try:
+        answers = PollsOptions.query.filter_by(poll_id=pollId)
         if answers is None:
             return -1
         return answers

@@ -13,8 +13,8 @@ NOTFOUND = 404
 CONFLICT = 409
 OK = 200
 
-
 curr_poll = 0
+
 
 @app.before_first_request
 def init():
@@ -58,6 +58,7 @@ def get_admins():
     print("this is the list of admins returned to react: ", admins_list)
     return {'admins': admins_list}
 
+
 @app.route('/pollDesc', methods=['GET'])
 def get_poll_desc():
     poll_id = request.args.get('poll_id')
@@ -73,14 +74,21 @@ def get_answers():
     pollId = request.args.get('pollId')
     print('pollId: ' + pollId)
     answers = db_fetch_poll_answers(pollId)
-    #answers = db_fetch_poll_answers()
-    #answers = db_fetch_admins()
-    #print('answers: ' + answers)
+    print("this is answers:", answers)
+    answers_desc = db_fetch_poll_answers_desc(pollId)
+    print("this is answers desc: ", answers_desc)
+    # answers = db_fetch_poll_answers()
+    # answers = db_fetch_admins()
+    # print('answers: ' + answers)
     answers_list = []
     for answer in answers:
         answers_list.append(format_answer(answer))
-    print("this is the list of answers returned to react: ", answers_list)
+    for desc in answers_desc:
+        for answer in answers_list:
+            if desc.poll_id == answer['poll_id'] and desc.ans_num == answer['ans_num']:
+                answer['ans_desc'] = desc.ans_des
     return {'answers_list': answers_list}
+
 
 @app.route('/allAnswers', methods=['GET'])
 def get_all_answers():
@@ -92,6 +100,7 @@ def get_all_answers():
     print("this is the list of answers returned to react: ", answers_list)
     return {'answers_list': answers_list}
 
+
 @app.route('/filteredAnswers', methods=['GET'])
 def get_filtered_answers():
     data = request.get_json()
@@ -99,8 +108,8 @@ def get_filtered_answers():
     print("user_id: ", request.args.get('user_id'))
     print("poll_id: ", request.args.get('poll_id'))
     print("ans_num: ", request.args.get('ans_num'))
-    #print('user_id_filter')
-    #print(request.args.get('user_id'))
+    # print('user_id_filter')
+    # print(request.args.get('user_id'))
     user_id_filter = request.args.get('user_id')
     poll_id_filter = request.args.get('poll_id')
     answer_num_filter = request.args.get('ans_num')
@@ -113,12 +122,13 @@ def get_filtered_answers():
     if (answer_num_filter == None or answer_num_filter == ''):
         answer_num_filter = -1;
 
-    answers = db_fetch_filtered_answers(user_id_filter,poll_id_filter, answer_num_filter)
+    answers = db_fetch_filtered_answers(user_id_filter, poll_id_filter, answer_num_filter)
     answers_list = []
     for answer in answers:
         answers_list.append(format_answer(answer))
     print("this is the list of answers returned to react: ", answers_list)
     return {'answers_list': answers_list}
+
 
 @app.route('/polls', methods=['POST'])
 def add_poll():
@@ -134,6 +144,7 @@ def add_poll():
     curr_poll += 1
     return Response("poll added", status=OK)
 
+
 @app.route('/users', methods=['GET'])
 def get_users():
     users = db_fetch_users()
@@ -141,6 +152,7 @@ def get_users():
     for user in users:
         users_list.append(format_user(user))
     return {'users': users_list}
+
 
 @app.route('/polls', methods=['GET'])
 def get_polls_by_admin():
@@ -167,6 +179,7 @@ def add_admin():
         return Response("this admin is already registered", status=CONFLICT)
     return Response("admin added", status=OK)
 
+
 @app.route('/answerPoll', methods=['POST'])
 def get_poll_ans():
     chat_id = int(request.args.get("chat_id"))
@@ -176,6 +189,7 @@ def get_poll_ans():
     db_add_user_answer(chat_id, poll_id, answer)
     db_delete_generated_poll(generated_id)
     return Response("answer added", status=OK)
+
 
 class admin_data:
     userId = "789789",
@@ -187,7 +201,6 @@ class admin_data:
 
 # static user details
 admin = admin_data()
-
 
 if __name__ == '__main__':
     app.debug = True
