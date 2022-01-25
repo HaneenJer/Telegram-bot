@@ -1,12 +1,10 @@
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
-
+  background: rgba(255,255,255,0.5);
   width: auto;
-  margin-left:auto;
-  margin-right:auto;
-}
 
+}
 
 
 td, th {
@@ -23,4 +21,13 @@ tr:nth-child(even) {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 20px;
+
+}
+
+.pollIdClass{
+     background: rgba(255,255,255,0.8);
+
+}
+.my_poll {
+    background: rgba(255,255,255,0.8);
 }
