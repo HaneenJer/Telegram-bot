@@ -1,5 +1,5 @@
 postgres = {
-    "SQLALCHEMY_DATABASE_URI": "postgresql://postgres:i4gw6RHK@localhost:5432/tele_polls",
+    "SQLALCHEMY_DATABASE_URI": "postgresql://postgres:password@localhost:5432/tele_polls",
     "SECRET_KEY": "g34jdk9018220dd",
     "SQLALCHEMY_TRACK_MODIFICATIONS": False,
 }
